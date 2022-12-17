@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { connect } from "react-redux";
 import { createGame } from "../ducks/games/actions";
+import { getMapsList } from "../ducks/maps/actions";
 
-const MapDetails = ({ maps, createGame }) => {
+const MapDetails = ({ maps, createGame, getMapsList }) => {
   //REDUX CLEARS STATE WHEN GOING BACK - to fix
+  useEffect(() => {
+    if (maps.length === 0) {
+      getMapsList();
+    }
+  });
   const newGameID = uuidv4();
   const { id } = useParams();
   // console.log(id);
@@ -18,13 +24,15 @@ const MapDetails = ({ maps, createGame }) => {
 
   return (
     <div>
-      {map && map.locationsList && (
+      {map && map.locationsList ? (
         <div>
           <div>Map {id}</div>
           <div>{map.name}</div>
           <div>{map.description}</div>
           <div>{map.locationsList.length} locations</div>
         </div>
+      ) : (
+        <div>Loading...</div>
       )}
       <div className="menu-options">
         <div className="white start">Start a new game</div>
@@ -73,7 +81,7 @@ const MapDetails = ({ maps, createGame }) => {
             });
           }}
         >
-          <Link to={`../../game/${uuidv4()}`}>START GAME</Link>
+          <Link to={`../../game/${newGameID}`}>START GAME</Link>
         </button>
       </div>
     </div>
@@ -81,18 +89,14 @@ const MapDetails = ({ maps, createGame }) => {
 };
 
 const mapStateToProps = (state, props) => {
-  // const { id } = useParams();
-  // const map = state.maps.filter((map) => map._id === id);
-  // const owner = state.users.filter(user => user.id === car[0].owner_id)[0]
-
   return {
-    // map: map,
     maps: state.maps,
   };
 };
 
 const mapDispatchToProps = {
   createGame,
+  getMapsList,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapDetails);

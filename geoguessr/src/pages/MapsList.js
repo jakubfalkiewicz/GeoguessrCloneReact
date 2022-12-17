@@ -9,20 +9,25 @@ const MapsList = ({ getMapsList, maps }) => {
       getMapsList();
     }
   });
+  console.log(maps);
   return (
     <div>
       <h1>MapsList</h1>
       <div className="gameslist-games">
-        {maps.map((el) => (
-          <Link key={el._id} to={el._id}>
-            <div className="gameslist-game" id={el._id}>
-              <div>{el.name}</div>
-              <div>{el.description}</div>
-              <div>{el.likes} likes</div>
-              <div>{el.locationsList.length} locations</div>
-            </div>
-          </Link>
-        ))}
+        {maps.length !== 0 ? (
+          maps.map((el) => (
+            <Link key={el._id} to={el._id}>
+              <div className="gameslist-game" id={el._id}>
+                <div>{el.name}</div>
+                <div>{el.description}</div>
+                <div>{el.likes} likes</div>
+                <div>{el.locationsList.length} locations</div>
+              </div>
+            </Link>
+          ))
+        ) : (
+          <div>MAPS LOADING...</div>
+        )}
       </div>
     </div>
   );
