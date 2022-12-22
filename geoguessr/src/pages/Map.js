@@ -1,58 +1,5 @@
-// import { useMemo } from "react";
-// import {
-//   GoogleMap,
-//   useLoadScript,
-//   Marker,
-//   LoadScript,
-//   StreetViewPanorama,
-// } from "@react-google-maps/api";
-// // import ScriptLoaded from "@react-google-maps/api/src/docs/ScriptLoaded";
-
-// function Home() {
-//   console.log(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
-//   const { isLoaded } = useLoadScript({
-//     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-//   });
-
-//   if (!isLoaded) return <div>Loading...</div>;
-//   return (
-//     <div>
-//       <Map />
-//     </div>
-//   );
-// }
-
-// function Map() {
-//   const mapContainerStyle = {
-//     height: "400px",
-//     width: "800px",
-//   };
-
-//   const center = {
-//     lat: 54.364442,
-//     lng: 18.643173,
-//   };
-
-//   return (
-//     <GoogleMap
-//       id="circle-example"
-//       mapContainerStyle={mapContainerStyle}
-//       zoom={7}
-//       center={center}
-//     >
-//       <StreetViewPanorama position={center} visible={true} />
-//     </GoogleMap>
-//   );
-// }
-
-// export default Home;
-
 import React from "react";
-import {
-  GoogleMap,
-  LoadScript,
-  StreetViewPanorama,
-} from "@react-google-maps/api";
+import { GoogleMap, StreetViewPanorama } from "@react-google-maps/api";
 
 function Map() {
   const containerStyle = {
@@ -64,8 +11,11 @@ function Map() {
     lat: 54.364442,
     lng: 18.643173,
   };
+  const panorama = document.querySelector(".panorama-container").childNodes[0];
+  panorama.style.width = "100%";
+  panorama.style.height = "100vh";
   return (
-    <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
+    <div className="panorama-container">
       <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
         <StreetViewPanorama
           id="street-view"
@@ -74,8 +24,8 @@ function Map() {
           visible={true}
         />
       </GoogleMap>
-    </LoadScript>
+    </div>
   );
 }
 
-export default React.memo(Map);
+export default Map;

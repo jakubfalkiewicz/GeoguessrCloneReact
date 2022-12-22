@@ -5,13 +5,23 @@ import { Routes, Route } from "react-router-dom";
 import NotFound from "./NotFound";
 import GameLogic from "./GameLogic";
 import GameSummary from "./GameSummary";
+import { LoadScript } from "@react-google-maps/api";
 
 export default function MapRoutes() {
+  const lib = ["places"];
+  const key = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
   return (
     <div>
       <Routes>
         {/* <Route index element={<MapsList />} /> */}
-        <Route path=":id" element={<GameLogic />} />
+        <Route
+          path=":id"
+          element={
+            <LoadScript googleMapsApiKey={key} libraries={lib}>
+              <GameLogic />
+            </LoadScript>
+          }
+        />
         <Route path="summary" element={<GameSummary />} />
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
