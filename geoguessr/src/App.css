@@ -22,6 +22,92 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+/* remove google logo */
+a[href^="http://maps.google.com/maps"]
+{
+  display: none !important;
+}
+a[href^="https://maps.google.com/maps"]
+{
+  display: none !important;
+}
+/* remove google shortcuts */
+.gmnoprint a,
+.gmnoprint span,
+.gm-style-cc,
+.gm-compass-turn,
+.gm-compass img,
+.gm-compass-tooltip-text,
+.gm-compass-arrow-right-outer,
+.gm-compass-arrow-right-inner {
+  display: none;
+}
+.gmnoprint div {
+  background: none !important;
+}
+/* resized compass */
+.gm-compass-needle > img {
+  width: 85px;
+  height: 85px;
+}
+.gm-compass-needle {
+  display: flex !important;
+  background-color: transparent !important;
+}
+
+/* zoom buttons /w compass */
+.gm-bundled-control-on-bottom {
+  position: fixed !important;
+  left: 15px !important;
+  bottom: 270px !important;
+  margin: 0 !important;
+  /* margin-left: 3px !important; */
+}
+
+.gmnoprint > div > button {
+  border-radius: 90px;
+  width: 48px !important;
+  height: 48px !important;
+  background-color: rgba(0, 0, 0, 0.605) !important;
+  margin-left: -3px !important;
+  /* margin-bottom: 15px !important; */
+}
+.gmnoprint > div {
+  display: flex !important;
+  flex-direction: column;
+  gap: 5px;
+  height: auto !important;
+  /* margin-top: 30px !important; */
+  box-shadow: none !important;
+}
+.gmnoprint > div > .gm-compass {
+  /* margin-left: 3px; */
+  margin-top: 10px !important;
+}
+
+/* starting point flag */
+#startingPoint {
+  position: fixed;
+  bottom: 15px;
+  left: 15px;
+  z-index: 2;
+  background-color: transparent;
+  border: transparent;
+}
+#startingPoint > img {
+  width: 28px;
+  height: 28px;
+  background-color: rgba(0, 0, 0, 0.605);
+  padding: 10px;
+  border-radius: 360px;
+}
+#startingPoint > img:hover {
+  cursor: pointer;
+}
+#startingPoint.active {
+  display: none;
+}
+
 .gameslist-games {
   display: flex;
   border: 2px solid black;
