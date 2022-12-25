@@ -1,6 +1,7 @@
 .App {
   text-align: center;
 }
+@import url("https://fonts.googleapis.com/css2?family=Titillium+Web:wght@700&display=swap");
 
 .App-logo {
   height: 40vmin;
@@ -22,6 +23,51 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+/* Google maps map */
+#map-container {
+  position: fixed;
+  bottom: 20px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  z-index: 1;
+  opacity: 0.5;
+}
+#map {
+  border: 2px solid transparent;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+#map-container:hover {
+  opacity: 1;
+}
+#map-container:hover > #map {
+  width: 560px !important;
+  height: 400px !important;
+}
+
+#nextRound,
+#confirmButton {
+  padding: 7px 20px 7px 20px;
+  background-color: rgba(0, 0, 0, 0.425);
+  border-radius: 30px;
+  border: none;
+  color: white;
+  width: 100%;
+  opacity: 1;
+  font-size: 14px;
+  font-family: "Titillium Web", sans-serif;
+  margin-top: 5px;
+  transition: all 0.2s ease;
+}
+#nextRound:hover,
+#confirmButton:hover {
+  padding: 12px 22px 12px 22px;
+  margin-top: 1px;
+}
+
 /* remove google logo */
 a[href^="http://maps.google.com/maps"]
 {
@@ -50,6 +96,11 @@ a[href^="https://maps.google.com/maps"]
   width: 85px;
   height: 85px;
 }
+
+Marker {
+  transition: 0.5s all ease;
+}
+
 .gm-compass-needle {
   display: flex !important;
   background-color: transparent !important;
