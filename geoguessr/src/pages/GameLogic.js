@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router";
 import { connect } from "react-redux";
 import { getGamesList } from "../ducks/games/actions";
@@ -6,9 +6,15 @@ import { GoogleMap, StreetViewPanorama, Marker } from "@react-google-maps/api";
 
 const GameLogic = ({ games }) => {
   const [round, setRound] = useState(0);
+  const [roundSummary, setRoundSummary] = useState(false);
+  const [roundScore, setRoundScore] = useState(0);
+  const [gameScore, setGameScore] = useState(0);
   const { id } = useParams();
   const [markers, setMarkers] = useState([]);
+  const [solutionMarkers, setSolutionMarkers] = useState([]);
   const [map, setMap] = useState(null);
+  const [mapSize, setMapSize] = useState(null);
+  const [distance, setDistance] = useState(null);
 
   let game =
     games.filter((game) => game.id === id)[0] ||
@@ -52,43 +58,102 @@ const GameLogic = ({ games }) => {
 
   const location = game.locations[round];
 
-  const addSolMarker = () => {
-    const scaledIcon = {
-      url: "https://www.geoguessr.com/_next/static/images/correct-location-4da7df904fc6b08ce841e4ce63cd8bfb.png",
-      scaledSize: new window.google.maps.Size(25, 25),
-    };
-    const markerSol = new window.google.maps.Marker({
-      location,
-      map,
-      icon: scaledIcon,
-      url: `https://www.google.com/maps?q&layer=c&cbll=${location.lat},${location.lng}`,
-    });
-    console.log(markerSol);
+  const addSolutionMarker = () => {
     setMarkers((current) => [
       ...current,
       {
         lat: location.lat,
         lng: location.lng,
-        icon: scaledIcon,
         url: `https://www.google.com/maps?q&layer=c&cbll=${location.lat},${location.lng}`,
       },
     ]);
+    setSolutionMarkers(markers);
   };
 
-  const evaluateGuess = () => {
-    const solPos = new window.google.maps.LatLng(location.lat, location.lng);
-    const markerPos = new window.google.maps.LatLng(
+  const addPolyLine = (markersCoordinates) => {
+    const lineSymbol = {
+      path: "M 0,0 0,0",
+      strokeOpacity: 1,
+      scale: 3,
+    };
+    const markersLinePath = new window.google.maps.Polyline({
+      path: markersCoordinates,
+      geodesic: true,
+      strokeColor: "#FFFFF",
+      strokeOpacity: 0,
+      icons: [
+        {
+          icon: lineSymbol,
+          offset: "0",
+          repeat: "5px",
+        },
+      ],
+    });
+    markersLinePath.setMap(map);
+  };
+
+  const zoomFitBounds = (boundsList) => {
+    const bounds = new window.google.maps.LatLngBounds();
+    boundsList.forEach((coord) => {
+      bounds.extend(coord);
+    });
+    map.fitBounds(bounds);
+  };
+
+  const getDistacneInUnits = () => {
+    if (parseFloat(distance).toFixed(1) > 2000) {
+      return `${(parseFloat(distance) / 1000).toFixed(1)} KM`;
+    }
+    if (parseFloat(distance).toFixed(1) > 10000) {
+      return `${parseInt(distance / 1000)} KM`;
+    }
+    if (parseFloat(distance).toFixed(1) <= 2000) {
+      return `${parseInt(distance)} M`;
+    }
+  };
+
+  const getRoundScore = (dist) => {
+    console.log(dist);
+    const exponent = 0.9893391207 ** parseFloat(dist / 1000);
+    console.log(exponent);
+    setRoundScore(parseInt(5000 * exponent));
+
+    // roundPoints.innerHTML = `${parseInt(5000 * exponent)
+    //   .toString()
+    //   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} points`;
+    // progressBar.style = `width:${
+    //   parseFloat(parseInt(5000 * exponent) / 5000) * 100
+    // }%`;
+    // points.innerHTML = `${
+    //   parseInt(points.innerHTML) + parseInt(5000 * exponent)
+    // }`;
+  };
+
+  const handleGuess = () => {
+    const solutionPosition = new window.google.maps.LatLng(
+      location.lat,
+      location.lng
+    );
+    const markerPosition = new window.google.maps.LatLng(
       markers[0].lat,
       markers[0].lng
     );
 
     const distance =
       window.google.maps.geometry.spherical.computeDistanceBetween(
-        solPos,
-        markerPos
+        solutionPosition,
+        markerPosition
       );
-    console.log(distance);
-    addSolMarker();
+    setDistance(distance);
+    addSolutionMarker();
+    addPolyLine([solutionPosition, markerPosition]);
+    zoomFitBounds([solutionPosition, markerPosition]);
+    setRoundSummary(true);
+    setMapSize({
+      height: "100vh",
+      width: "100vw",
+    });
+    getRoundScore(distance);
   };
 
   const center = {
@@ -166,23 +231,25 @@ const GameLogic = ({ games }) => {
           />
         </div>
       </div>
-      <div id="map-container">
+      <div id={"map-container"} className={roundSummary ? "active" : ""}>
         <GoogleMap
           id="map"
-          mapContainerStyle={{
-            height: "210px",
-            width: "250px",
-          }}
+          mapContainerStyle={
+            mapSize || {
+              height: "210px",
+              width: "250px",
+            }
+          }
           zoom={3}
           center={
             markers.length > 0
               ? {
-                  lat: markers[0].lat,
-                  lng: markers[0].lng,
+                  lat: map.center.lat(),
+                  lng: map.center.lng(),
                 }
               : { lat: 0, lng: 0 }
           }
-          onClick={onMapClick}
+          onClick={!roundSummary ? onMapClick : {}}
           onLoad={onLoad}
         >
           {markers.length > 0 &&
@@ -190,25 +257,47 @@ const GameLogic = ({ games }) => {
               <Marker
                 key={`${marker.lat}-${marker.lng}`}
                 position={{ lat: marker.lat, lng: marker.lng }}
-                icon={{
-                  url: marker.url
-                    ? `https://www.geoguessr.com/_next/static/images/correct-location-4da7df904fc6b08ce841e4ce63cd8bfb.png`
-                    : `https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi.png`,
-                  scaledSize: marker.url
-                    ? new window.google.maps.Size(25, 25)
-                    : new window.google.maps.Size(22, 40),
-                }}
+                icon={
+                  marker.url
+                    ? {
+                        url: `https://www.geoguessr.com/_next/static/images/correct-location-4da7df904fc6b08ce841e4ce63cd8bfb.png`,
+                        scaledSize: new window.google.maps.Size(25, 25),
+                      }
+                    : null
+                }
+                onClick={() =>
+                  marker.url ? window.open(marker.url, "_blank") : {}
+                }
               />
             ))}
         </GoogleMap>
-        <button
-          id="confirmButton"
-          onClick={() => {
-            markers.length > 0 ? evaluateGuess() : console.log("no marker");
-          }}
-        >
-          {markers.length > 0 ? "GUESS" : "PLACE YOUR PIN ON THE MAP"}
-        </button>
+        {(markers.length === 0 || markers.length % 2 !== 0) && (
+          <button
+            id="confirmButton"
+            onClick={() => {
+              markers.length > 0 ? handleGuess() : console.log("no marker");
+            }}
+          >
+            {markers.length > 0 ? "GUESS" : "PLACE YOUR PIN ON THE MAP"}
+          </button>
+        )}
+        {markers.length > 0 && markers.length % 2 === 0 && (
+          <div className="scoreboard">
+            <div className="roundPoints">{roundScore} points</div>
+            <div id="progressBar" max="100">
+              <div
+                id="progress"
+                style={{
+                  width: `${parseFloat(parseInt(roundScore) / 5000) * 100}%`,
+                }}
+              ></div>
+            </div>
+            <div className="score">
+              Your guess was {getDistacneInUnits()} away
+            </div>
+            <button id="nextRound">NEXT ROUND</button>
+          </div>
+        )}
       </div>
     </div>
   );
