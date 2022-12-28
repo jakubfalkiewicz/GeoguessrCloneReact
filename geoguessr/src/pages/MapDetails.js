@@ -78,6 +78,8 @@ const MapDetails = ({ maps, createGame, getMapsList }) => {
               player: "Jan",
               locations: random,
               currentRound: 1,
+              roundsList: [],
+              timesList: [],
             });
           }}
         >

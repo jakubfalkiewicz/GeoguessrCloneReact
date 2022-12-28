@@ -80,30 +80,36 @@
 
 #nextRound,
 #confirmButton {
-  padding: 7px 20px 7px 20px;
+  padding: 10px 20px 10px 20px;
   background-color: rgba(0, 0, 0, 0.425);
   border-radius: 30px;
   border: none;
   color: white;
   width: 100%;
   opacity: 1;
-  font-size: 14px;
+  font-size: 16px;
   font-family: "Titillium Web", sans-serif;
   margin-top: 5px;
   transition: all 0.2s ease;
 }
 #nextRound:hover,
-#confirmButton:hover {
+#confirmButton.active:hover {
   padding: 12px 22px 12px 22px;
   margin-top: 1px;
+  cursor: pointer;
 }
 
 #nextRound {
   width: auto;
   background-color: #6cb928;
 }
-#nextRound:hover {
-  cursor: pointer;
+
+#confirmButton.active {
+  background-color: #6cb928;
+}
+#confirmButton.active:hover {
+  padding: 12px 22px 12px 22px;
+  margin-top: 1px;
 }
 
 /* remove google logo */
@@ -131,8 +137,8 @@ a[href^="https://maps.google.com/maps"]
 }
 /* resized compass */
 .gm-compass-needle > img {
-  width: 85px;
-  height: 85px;
+  width: 70px;
+  height: 70px;
 }
 
 .gm-compass-needle {
@@ -143,7 +149,7 @@ a[href^="https://maps.google.com/maps"]
 /* zoom buttons /w compass */
 .gm-bundled-control-on-bottom {
   position: fixed !important;
-  left: 15px !important;
+  left: 12px !important;
   bottom: 270px !important;
   margin: 0 !important;
   /* margin-left: 3px !important; */
@@ -151,10 +157,10 @@ a[href^="https://maps.google.com/maps"]
 
 .gmnoprint > div > button {
   border-radius: 90px;
-  width: 48px !important;
-  height: 48px !important;
+  width: 39px !important;
+  height: 39px !important;
+
   background-color: rgba(0, 0, 0, 0.605) !important;
-  margin-left: -3px !important;
   /* margin-bottom: 15px !important; */
 }
 .gmnoprint > div {
@@ -162,12 +168,12 @@ a[href^="https://maps.google.com/maps"]
   flex-direction: column;
   gap: 5px;
   height: auto !important;
-  /* margin-top: 30px !important; */
+  margin-top: 15px !important;
   box-shadow: none !important;
 }
 .gmnoprint > div > .gm-compass {
   /* margin-left: 3px; */
-  margin-top: 10px !important;
+  margin-top: 30px !important;
 }
 
 /* starting point flag */
@@ -175,15 +181,15 @@ a[href^="https://maps.google.com/maps"]
   position: fixed;
   bottom: 15px;
   left: 15px;
-  z-index: 2;
+  z-index: 1;
   background-color: transparent;
   border: transparent;
 }
 #startingPoint > img {
-  width: 28px;
-  height: 28px;
+  width: 23px;
+  height: 23px;
   background-color: rgba(0, 0, 0, 0.605);
-  padding: 10px;
+  padding: 8px;
   border-radius: 360px;
 }
 #startingPoint > img:hover {

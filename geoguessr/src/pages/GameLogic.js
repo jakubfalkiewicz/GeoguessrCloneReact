@@ -1,8 +1,13 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useParams } from "react-router";
 import { connect } from "react-redux";
 import { getGamesList } from "../ducks/games/actions";
-import { GoogleMap, StreetViewPanorama, Marker } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  StreetViewPanorama,
+  Marker,
+  Polyline,
+} from "@react-google-maps/api";
 
 const GameLogic = ({ games }) => {
   const [round, setRound] = useState(0);
@@ -15,20 +20,63 @@ const GameLogic = ({ games }) => {
   const [map, setMap] = useState(null);
   const [mapSize, setMapSize] = useState(null);
   const [distance, setDistance] = useState(null);
+  const [backToStart, setBackToStart] = useState(null);
 
   let game =
     games.filter((game) => game.id === id)[0] ||
     JSON.parse(localStorage.getItem(`game${id}`));
 
-  const onLoad = useCallback((map) => {
-    map.setOptions({
-      draggableCursor: "crosshair",
-      gestureHandling: "greedy",
-      streetViewControl: false,
-      fullscreenControl: false,
-      disableDefaultUI: true,
-      clickableIcons: false,
-    });
+  // setRound(game.currentRound)
+
+  //REACT-GOOGLE-MAPS-COMPONENTS-OPTIONS
+  const mapOptions = {
+    draggableCursor: "crosshair",
+    gestureHandling: "greedy",
+    streetViewControl: false,
+    fullscreenControl: false,
+    disableDefaultUI: true,
+    clickableIcons: false,
+  };
+  const panoramaOptions = {
+    //COMPASS
+    panControl: true,
+    //ZOOM BUTTONS
+    zoomControl: game.zoom,
+    //ROAD ARROWS
+    linksControl: game.move,
+    //ZOOM
+    scrollwheel: game.zoom,
+    //MOVING
+    clickToGo: game.move,
+    //SHOW ADDRESS
+    addressControl: false,
+    //ROAD NAMES
+    showRoadLabels: false,
+    //ADDONS
+    fullscreenControl: false,
+    motionTrackingControl: true,
+    enableCloseButton: false,
+    visible: true,
+  };
+  const polyLineOptions = {
+    geodesic: true,
+    strokeColor: "#FFFFF",
+    strokeOpacity: 0,
+    icons: [
+      {
+        icon: {
+          path: "M 0,0 0,0",
+          strokeOpacity: 1,
+          scale: 3,
+        },
+        offset: "0",
+        repeat: "5px",
+      },
+    ],
+  };
+
+  const onMapLoad = useCallback((map) => {
+    map.setOptions(mapOptions);
     setMap(map);
   }, []);
 
@@ -42,7 +90,10 @@ const GameLogic = ({ games }) => {
   }, []);
 
   useEffect(() => {
+    // console.log(markersLinePath);
     if (games.length !== 0) {
+      // game.currentRound = round;
+      // game.roundsList = solutionMarkers;
       localStorage.setItem(`game${id}`, JSON.stringify(game));
     }
     const panorama =
@@ -70,28 +121,6 @@ const GameLogic = ({ games }) => {
     setSolutionMarkers(markers);
   };
 
-  const addPolyLine = (markersCoordinates) => {
-    const lineSymbol = {
-      path: "M 0,0 0,0",
-      strokeOpacity: 1,
-      scale: 3,
-    };
-    const markersLinePath = new window.google.maps.Polyline({
-      path: markersCoordinates,
-      geodesic: true,
-      strokeColor: "#FFFFF",
-      strokeOpacity: 0,
-      icons: [
-        {
-          icon: lineSymbol,
-          offset: "0",
-          repeat: "5px",
-        },
-      ],
-    });
-    markersLinePath.setMap(map);
-  };
-
   const zoomFitBounds = (boundsList) => {
     const bounds = new window.google.maps.LatLngBounds();
     boundsList.forEach((coord) => {
@@ -113,20 +142,8 @@ const GameLogic = ({ games }) => {
   };
 
   const getRoundScore = (dist) => {
-    console.log(dist);
     const exponent = 0.9893391207 ** parseFloat(dist / 1000);
-    console.log(exponent);
     setRoundScore(parseInt(5000 * exponent));
-
-    // roundPoints.innerHTML = `${parseInt(5000 * exponent)
-    //   .toString()
-    //   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} points`;
-    // progressBar.style = `width:${
-    //   parseFloat(parseInt(5000 * exponent) / 5000) * 100
-    // }%`;
-    // points.innerHTML = `${
-    //   parseInt(points.innerHTML) + parseInt(5000 * exponent)
-    // }`;
   };
 
   const handleGuess = () => {
@@ -146,7 +163,6 @@ const GameLogic = ({ games }) => {
       );
     setDistance(distance);
     addSolutionMarker();
-    addPolyLine([solutionPosition, markerPosition]);
     zoomFitBounds([solutionPosition, markerPosition]);
     setRoundSummary(true);
     setMapSize({
@@ -154,6 +170,15 @@ const GameLogic = ({ games }) => {
       width: "100vw",
     });
     getRoundScore(distance);
+  };
+
+  const nextRound = () => {
+    setMarkers([]);
+    setRound(round + 1);
+    setMapSize(null);
+    setRoundSummary(!roundSummary);
+    setGameScore(gameScore + roundScore);
+    map.setZoom(1);
   };
 
   const center = {
@@ -164,28 +189,6 @@ const GameLogic = ({ games }) => {
   const panoramaContainerStyle = {
     height: "100vh",
     width: "100vw",
-  };
-
-  const panoramaOptions = {
-    //COMPASS
-    panControl: true,
-    //ZOOM BUTTONS
-    zoomControl: game.zoom,
-    //ROAD ARROWS
-    linksControl: game.move,
-    //ZOOM
-    scrollwheel: game.zoom,
-    //MOVING
-    clickToGo: game.move,
-    //SHOW ADDRESS
-    addressControl: false,
-    //ROAD NAMES
-    showRoadLabels: false,
-    //ADDONS
-    fullscreenControl: false,
-    motionTrackingControl: true,
-    enableCloseButton: false,
-    visible: true,
   };
 
   if (!game.move) {
@@ -208,30 +211,44 @@ const GameLogic = ({ games }) => {
       { capture: true }
     );
   }
+  //PREVENT PANORAMA FROM GOING TO START POINT UNINTENTIONALLY
+  const panoMap = useMemo(
+    () => (
+      <GoogleMap
+        center={center}
+        zoom={10}
+        mapContainerStyle={panoramaContainerStyle}
+      >
+        <StreetViewPanorama
+          id="street-view"
+          position={center}
+          visible={true}
+          // onLoad={onPanoramaLoad}
+          options={panoramaOptions}
+        />
+      </GoogleMap>
+    ),
+    [round, backToStart]
+  );
 
   return (
     <div>
       <div id="panorama-container">
-        <GoogleMap
-          center={center}
-          zoom={10}
-          mapContainerStyle={panoramaContainerStyle}
+        {panoMap}
+        <div
+          id="startingPoint"
+          aria-label="Starting point"
+          onClick={() => {
+            setBackToStart(backToStart + 1);
+          }}
         >
-          <StreetViewPanorama
-            id="street-view"
-            position={center}
-            visible={true}
-            options={panoramaOptions}
-          />
-        </GoogleMap>
-        <div id="startingPoint" aria-label="Starting point">
           <img
             src="https://www.geoguessr.com/_next/static/images/icon-return-to-start-3b4eed3225adfd860a4ed3726ad1e05a.svg"
             alt="backToStart"
           />
         </div>
       </div>
-      <div id={"map-container"} className={roundSummary ? "active" : ""}>
+      <div id={"map-container"} className={markers.length > 1 ? "active" : ""}>
         <GoogleMap
           id="map"
           mapContainerStyle={
@@ -240,17 +257,17 @@ const GameLogic = ({ games }) => {
               width: "250px",
             }
           }
-          zoom={3}
+          zoom={1}
           center={
             markers.length > 0
               ? {
-                  lat: map.center.lat(),
-                  lng: map.center.lng(),
+                  lat: map.center.lat() || markers[0].lat,
+                  lng: map.center.lng() || markers[0].lng,
                 }
               : { lat: 0, lng: 0 }
           }
-          onClick={!roundSummary ? onMapClick : {}}
-          onLoad={onLoad}
+          onClick={markers.length !== 2 ? onMapClick : {}}
+          onLoad={onMapLoad}
         >
           {markers.length > 0 &&
             markers.map((marker) => (
@@ -270,10 +287,17 @@ const GameLogic = ({ games }) => {
                 }
               />
             ))}
+          {markers.length === 2 && (
+            <Polyline
+              path={[markers[0], markers[1]]}
+              options={polyLineOptions}
+            />
+          )}
         </GoogleMap>
         {(markers.length === 0 || markers.length % 2 !== 0) && (
           <button
             id="confirmButton"
+            className={markers.length > 0 ? "active" : ""}
             onClick={() => {
               markers.length > 0 ? handleGuess() : console.log("no marker");
             }}
@@ -295,7 +319,9 @@ const GameLogic = ({ games }) => {
             <div className="score">
               Your guess was {getDistacneInUnits()} away
             </div>
-            <button id="nextRound">NEXT ROUND</button>
+            <button id="nextRound" onClick={() => nextRound()}>
+              NEXT ROUND
+            </button>
           </div>
         )}
       </div>
