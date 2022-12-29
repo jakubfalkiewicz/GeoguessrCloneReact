@@ -33,7 +33,7 @@ export const sortMapsListAction = (maps) => ({
 
 export const getMapsList = () => {
   return async (dispatch) => {
-    const response = await axios.get("https://mongodb-api.onrender.com/games/");
+    const response = await axios.get("https://mongodb-api.onrender.com/maps/");
     const maps = response.data;
     dispatch(getMapsListAction(maps));
   };
@@ -43,7 +43,8 @@ export const createMap = (map) => {
   return async (dispatch) => {
     axios({
       method: "post",
-      url: "https://mongodb-api.onrender.com/games/",
+      // url: "https://mongodb-api.onrender.com/maps/",
+      url: "http://localhost:4000/maps/",
       data: map,
     })
       .then((response) => {

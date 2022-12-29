@@ -22,6 +22,27 @@ const MapDetails = ({ maps, createGame, getMapsList }) => {
   const [pan, setPan] = useState(true);
   const [zoom, setZoom] = useState(true);
 
+  const createNewGame = () => {
+    const random = map.locationsList
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 5);
+    createGame({
+      gameId: newGameID,
+      time: 0,
+      player: "639c73bbb0ef36ed25560b5d",
+      mapId: id,
+      move: move,
+      pan: pan,
+      zoom: zoom,
+      locations: random,
+      currentRound: 1,
+      roundsList: [],
+      timesList: [],
+    });
+    const start = document.getElementById("start");
+    setTimeout(() => start.click(), 500);
+  };
+
   return (
     <div>
       {map && map.locationsList ? (
@@ -63,28 +84,10 @@ const MapDetails = ({ maps, createGame, getMapsList }) => {
             />
           </div>
         </div>
-        <button
-          id="startGame"
-          onClick={() => {
-            const random = map.locationsList
-              .sort(() => 0.5 - Math.random())
-              .slice(0, 5);
-            createGame({
-              id: newGameID,
-              move: move,
-              pan: pan,
-              zoom: zoom,
-              time: 0,
-              player: "Jan",
-              locations: random,
-              currentRound: 1,
-              roundsList: [],
-              timesList: [],
-            });
-          }}
-        >
-          <Link to={`../../game/${newGameID}`}>START GAME</Link>
+        <button id="startGame" onClick={() => createNewGame()}>
+          START GAME
         </button>
+        <Link id="start" to={`../../game/${newGameID}`}></Link>
       </div>
     </div>
   );

@@ -42,16 +42,16 @@ export const getGamesList = () => {
 export const createGame = (game) => {
   console.log(game);
   return async (dispatch) => {
-    dispatch(createGameAction(game));
-    //     axios({
-    //       method: "post",
-    //       url: "http://localhost:5000/api/persons/",
-    //       data: game,
-    //     })
-    //       .then((response) => {
-    //         dispatch(createGameAction(response.data));
-    //       })
-    //       .catch((error) => console.log(error));
+    axios({
+      method: "post",
+      url: "https://mongodb-api.onrender.com/games",
+      data: game,
+    })
+      .then((response) => {
+        console.log(response.data);
+        dispatch(createGameAction(response.data));
+      })
+      .catch((error) => console.log(error));
   };
 };
 
@@ -59,7 +59,7 @@ export const editGame = (game) => {
   return async (dispatch) => {
     axios({
       method: "put",
-      url: `http://localhost:5000/api/persons/${game.id}`,
+      url: `https://mongodb-api.onrender.com/games/${game.id}`,
       data: game,
     })
       .then((response) => {

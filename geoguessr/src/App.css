@@ -42,12 +42,19 @@
   border-radius: 15px;
   transition: all 0.3s ease;
 }
-#map-container:hover {
+#map-container:hover,
+#map-container:active {
   opacity: 1;
 }
+
 #map-container:hover > #map {
   width: 560px !important;
   height: 400px !important;
+}
+#map-container:active > #map {
+  width: 560px !important;
+  height: 400px !important;
+  opacity: 1;
 }
 
 #map-container.active {
@@ -79,7 +86,8 @@
 }
 
 #nextRound,
-#confirmButton {
+#confirmButton,
+#playAgain {
   padding: 10px 20px 10px 20px;
   background-color: rgba(0, 0, 0, 0.425);
   border-radius: 30px;
@@ -93,13 +101,15 @@
   transition: all 0.2s ease;
 }
 #nextRound:hover,
-#confirmButton.active:hover {
+#confirmButton.active:hover,
+#playAgain:hover {
   padding: 12px 22px 12px 22px;
   margin-top: 1px;
   cursor: pointer;
 }
 
-#nextRound {
+#nextRound,
+#playAgain {
   width: auto;
   background-color: #6cb928;
 }
@@ -110,6 +120,10 @@
 #confirmButton.active:hover {
   padding: 12px 22px 12px 22px;
   margin-top: 1px;
+}
+
+#start {
+  display: none;
 }
 
 /* remove google logo */
@@ -236,6 +250,29 @@ a[href^="https://maps.google.com/maps"]
 .switch-col {
   display: flex;
   gap: 5px;
+}
+
+.score-board {
+  position: fixed;
+  top: 50px;
+  right: 0;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.605);
+  color: white;
+  padding: 5px;
+  display: flex;
+  gap: 20px;
+}
+.score-board > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.roundPoints {
+  font-style: italic;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fecd19;
 }
 
 .App-link {

@@ -8,22 +8,22 @@ import {
   Marker,
   Polyline,
 } from "@react-google-maps/api";
+import { Link } from "react-router-dom";
 
-const GameLogic = ({ games }) => {
-  const [round, setRound] = useState(0);
-  const [roundSummary, setRoundSummary] = useState(false);
+const GameLogic = ({ games, maps }) => {
+  const [round, setRound] = useState(1);
   const [roundScore, setRoundScore] = useState(0);
   const [gameScore, setGameScore] = useState(0);
   const { id } = useParams();
   const [markers, setMarkers] = useState([]);
-  const [solutionMarkers, setSolutionMarkers] = useState([]);
+  const [summaryMarkers, setSummaryMarkers] = useState([]);
   const [map, setMap] = useState(null);
   const [mapSize, setMapSize] = useState(null);
   const [distance, setDistance] = useState(null);
   const [backToStart, setBackToStart] = useState(null);
 
   let game =
-    games.filter((game) => game.id === id)[0] ||
+    games.filter((game) => game.gameId === id)[0] ||
     JSON.parse(localStorage.getItem(`game${id}`));
 
   // setRound(game.currentRound)
@@ -78,6 +78,11 @@ const GameLogic = ({ games }) => {
   const onMapLoad = useCallback((map) => {
     map.setOptions(mapOptions);
     setMap(map);
+    // const bounds = new window.google.maps.LatLngBounds();
+    // game.locations.forEach((loc) =>
+    //   bounds.extend({ lat: loc.lat, lng: loc.lng })
+    // );
+    // map.fitBounds(bounds);
   }, []);
 
   const onMapClick = useCallback((e) => {
@@ -91,9 +96,10 @@ const GameLogic = ({ games }) => {
 
   useEffect(() => {
     // console.log(markersLinePath);
+    console.log(markers);
     if (games.length !== 0) {
       // game.currentRound = round;
-      // game.roundsList = solutionMarkers;
+      // game.roundsList = summaryMarkers;
       localStorage.setItem(`game${id}`, JSON.stringify(game));
     }
     const panorama =
@@ -107,18 +113,17 @@ const GameLogic = ({ games }) => {
     }
   });
 
-  const location = game.locations[round];
+  const location = game.locations[round - 1];
 
   const addSolutionMarker = () => {
-    setMarkers((current) => [
-      ...current,
-      {
-        lat: location.lat,
-        lng: location.lng,
-        url: `https://www.google.com/maps?q&layer=c&cbll=${location.lat},${location.lng}`,
-      },
-    ]);
-    setSolutionMarkers(markers);
+    const solMarker = {
+      lat: location.lat,
+      lng: location.lng,
+      url: `https://www.google.com/maps?q&layer=c&cbll=${location.lat},${location.lng}`,
+    };
+    markers.push(solMarker);
+    summaryMarkers.push(markers);
+    console.log(summaryMarkers);
   };
 
   const zoomFitBounds = (boundsList) => {
@@ -142,8 +147,9 @@ const GameLogic = ({ games }) => {
   };
 
   const getRoundScore = (dist) => {
+    //https://www.reddit.com/r/geoguessr/comments/7ekj80/for_all_my_geoguessing_math_nerds/
     const exponent = 0.9893391207 ** parseFloat(dist / 1000);
-    setRoundScore(parseInt(5000 * exponent));
+    setRoundScore(parseInt(5000 * exponent) + 1);
   };
 
   const handleGuess = () => {
@@ -164,7 +170,6 @@ const GameLogic = ({ games }) => {
     setDistance(distance);
     addSolutionMarker();
     zoomFitBounds([solutionPosition, markerPosition]);
-    setRoundSummary(true);
     setMapSize({
       height: "100vh",
       width: "100vw",
@@ -173,12 +178,18 @@ const GameLogic = ({ games }) => {
   };
 
   const nextRound = () => {
-    setMarkers([]);
-    setRound(round + 1);
-    setMapSize(null);
-    setRoundSummary(!roundSummary);
-    setGameScore(gameScore + roundScore);
-    map.setZoom(1);
+    if (round === game.locations.length) {
+      console.log(summaryMarkers);
+      const summaryMarkersFlattened = summaryMarkers.flat();
+      setGameScore(gameScore + roundScore);
+      setMarkers(summaryMarkersFlattened);
+    } else {
+      setMarkers([]);
+      setRound(round + 1);
+      setMapSize(null);
+      setGameScore(gameScore + roundScore);
+      map.setZoom(1);
+    }
   };
 
   const center = {
@@ -216,7 +227,7 @@ const GameLogic = ({ games }) => {
     () => (
       <GoogleMap
         center={center}
-        zoom={10}
+        zoom={1}
         mapContainerStyle={panoramaContainerStyle}
       >
         <StreetViewPanorama
@@ -247,6 +258,16 @@ const GameLogic = ({ games }) => {
             alt="backToStart"
           />
         </div>
+        <div className="score-board">
+          <div>
+            <div>Round</div>
+            <div>{round}</div>
+          </div>
+          <div>
+            <div>Score</div>
+            <div>{gameScore}</div>
+          </div>
+        </div>
       </div>
       <div id={"map-container"} className={markers.length > 1 ? "active" : ""}>
         <GoogleMap
@@ -266,7 +287,9 @@ const GameLogic = ({ games }) => {
                 }
               : { lat: 0, lng: 0 }
           }
-          onClick={markers.length !== 2 ? onMapClick : {}}
+          onClick={
+            markers.length !== 2 && markers.length !== 10 ? onMapClick : {}
+          }
           onLoad={onMapLoad}
         >
           {markers.length > 0 &&
@@ -293,6 +316,14 @@ const GameLogic = ({ games }) => {
               options={polyLineOptions}
             />
           )}
+          {markers.length === 10 &&
+            summaryMarkers.map((markersList) => (
+              <Polyline
+                key={`${markersList[0].lat}-${markersList[0].lng}`}
+                path={[markersList[0], markersList[1]]}
+                options={polyLineOptions}
+              />
+            ))}
         </GoogleMap>
         {(markers.length === 0 || markers.length % 2 !== 0) && (
           <button
@@ -307,21 +338,36 @@ const GameLogic = ({ games }) => {
         )}
         {markers.length > 0 && markers.length % 2 === 0 && (
           <div className="scoreboard">
-            <div className="roundPoints">{roundScore} points</div>
+            <div className="roundPoints">
+              {markers.length !== 10 ? roundScore : gameScore} points
+            </div>
             <div id="progressBar" max="100">
               <div
                 id="progress"
                 style={{
-                  width: `${parseFloat(parseInt(roundScore) / 5000) * 100}%`,
+                  width: `${
+                    markers.length !== 10
+                      ? parseFloat(parseInt(roundScore) / 5000) * 100
+                      : parseFloat(parseInt(gameScore) / 25000) * 100
+                  }%`,
                 }}
               ></div>
             </div>
-            <div className="score">
-              Your guess was {getDistacneInUnits()} away
-            </div>
+            {markers.length !== 10 ? (
+              <div className="score">
+                Your guess was {getDistacneInUnits()} away
+              </div>
+            ) : (
+              <div>Well played!</div>
+            )}
             <button id="nextRound" onClick={() => nextRound()}>
-              NEXT ROUND
+              {summaryMarkers.length !== 5 ? "NEXT ROUND" : "SUMMARY"}
             </button>
+            {summaryMarkers.length === 5 && (
+              <button id="playAgain" onClick={() => nextRound()}>
+                <Link to={`../../maps/${game.mapId}`}>PLAY AGAIN</Link>
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -332,6 +378,7 @@ const GameLogic = ({ games }) => {
 const mapStateToProps = (state, props) => {
   return {
     games: state.games,
+    maps: state.maps,
   };
 };
 
