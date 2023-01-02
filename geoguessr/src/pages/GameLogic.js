@@ -127,6 +127,7 @@ const GameLogic = ({ games, maps }) => {
   };
 
   const zoomFitBounds = (boundsList) => {
+    console.log(boundsList);
     const bounds = new window.google.maps.LatLngBounds();
     boundsList.forEach((coord) => {
       bounds.extend(coord);
@@ -183,6 +184,7 @@ const GameLogic = ({ games, maps }) => {
       const summaryMarkersFlattened = summaryMarkers.flat();
       setGameScore(gameScore + roundScore);
       setMarkers(summaryMarkersFlattened);
+      zoomFitBounds(summaryMarkersFlattened);
     } else {
       setMarkers([]);
       setRound(round + 1);
@@ -364,9 +366,11 @@ const GameLogic = ({ games, maps }) => {
               {summaryMarkers.length !== 5 ? "NEXT ROUND" : "SUMMARY"}
             </button>
             {summaryMarkers.length === 5 && (
-              <button id="playAgain" onClick={() => nextRound()}>
-                <Link to={`../../maps/${game.mapId}`}>PLAY AGAIN</Link>
-              </button>
+              <Link to={`../../maps/${game.mapId}`}>
+                <button id="playAgain" onClick={() => nextRound()}>
+                  PLAY AGAIN
+                </button>
+              </Link>
             )}
           </div>
         )}

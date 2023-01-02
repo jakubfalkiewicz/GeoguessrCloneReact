@@ -113,6 +113,10 @@
   width: auto;
   background-color: #6cb928;
 }
+#playAgain > Link {
+  text-decoration: none;
+  color: white;
+}
 
 #confirmButton.active {
   background-color: #6cb928;
