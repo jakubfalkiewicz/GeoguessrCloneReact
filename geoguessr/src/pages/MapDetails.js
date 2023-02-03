@@ -40,7 +40,7 @@ const MapDetails = ({ maps, createGame, getMapsList }) => {
       timesList: [],
     });
     const start = document.getElementById("start");
-    setTimeout(() => start.click(), 500);
+    setTimeout(() => start.click(), 1000);
   };
 
   return (

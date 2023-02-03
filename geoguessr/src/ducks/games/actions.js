@@ -40,7 +40,6 @@ export const getGamesList = () => {
 };
 
 export const createGame = (game) => {
-  console.log(game);
   return async (dispatch) => {
     axios({
       method: "post",
@@ -56,6 +55,7 @@ export const createGame = (game) => {
 };
 
 export const editGame = (game) => {
+  console.log(game);
   return async (dispatch) => {
     axios({
       method: "put",

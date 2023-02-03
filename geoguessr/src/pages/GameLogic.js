@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useParams } from "react-router";
 import { connect } from "react-redux";
-import { getGamesList } from "../ducks/games/actions";
+import { getGamesList, editGame } from "../ducks/games/actions";
 import {
   GoogleMap,
   StreetViewPanorama,
@@ -10,7 +10,7 @@ import {
 } from "@react-google-maps/api";
 import { Link } from "react-router-dom";
 
-const GameLogic = ({ games, maps }) => {
+const GameLogic = ({ editGame, games, maps }) => {
   const [round, setRound] = useState(1);
   const [roundScore, setRoundScore] = useState(0);
   const [gameScore, setGameScore] = useState(0);
@@ -78,11 +78,11 @@ const GameLogic = ({ games, maps }) => {
   const onMapLoad = useCallback((map) => {
     map.setOptions(mapOptions);
     setMap(map);
-    // const bounds = new window.google.maps.LatLngBounds();
-    // game.locations.forEach((loc) =>
-    //   bounds.extend({ lat: loc.lat, lng: loc.lng })
-    // );
-    // map.fitBounds(bounds);
+    const bounds = new window.google.maps.LatLngBounds();
+    game.locations.forEach((loc) =>
+      bounds.extend({ lat: loc.lat, lng: loc.lng })
+    );
+    map.fitBounds(bounds);
   }, []);
 
   const onMapClick = useCallback((e) => {
@@ -98,19 +98,17 @@ const GameLogic = ({ games, maps }) => {
     // console.log(markersLinePath);
     console.log(markers);
     if (games.length !== 0) {
-      // game.currentRound = round;
-      // game.roundsList = summaryMarkers;
       localStorage.setItem(`game${id}`, JSON.stringify(game));
     }
     const panorama =
       document.getElementById("panorama-container").childNodes[0];
 
-    if (!game.pan) {
-      panorama.addEventListener("click", () => {
-        panorama.style.pointerEvents = "none";
-      });
-      panorama.click();
-    }
+    // if (!game.pan) {
+    //   panorama.addEventListener("click", () => {
+    //     panorama.style.pointerEvents = "none";
+    //   });
+    //   panorama.click();
+    // }
   });
 
   const location = game.locations[round - 1];
@@ -123,11 +121,9 @@ const GameLogic = ({ games, maps }) => {
     };
     markers.push(solMarker);
     summaryMarkers.push(markers);
-    console.log(summaryMarkers);
   };
 
   const zoomFitBounds = (boundsList) => {
-    console.log(boundsList);
     const bounds = new window.google.maps.LatLngBounds();
     boundsList.forEach((coord) => {
       bounds.extend(coord);
@@ -168,6 +164,11 @@ const GameLogic = ({ games, maps }) => {
         solutionPosition,
         markerPosition
       );
+
+    game.currentRound++;
+    game.roundsList.push([solutionPosition, markerPosition]);
+
+    editGame(game);
     setDistance(distance);
     addSolutionMarker();
     zoomFitBounds([solutionPosition, markerPosition]);
@@ -387,8 +388,8 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = {
-  // createGame,
   getGamesList,
+  editGame,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameLogic);
