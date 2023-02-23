@@ -1,0 +1,135 @@
+.account-info {
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: -3px;
+  .search-bar {
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 100%;
+    transform: scale(0.8);
+    cursor: pointer;
+
+    .skew-background-1 {
+      position: absolute;
+      top: 10px;
+      left: -10px;
+      width: 50%;
+      background-color: rgba(16, 16, 28, 0.4);
+      height: 3rem;
+      padding-left: 10px;
+      transform: skewX(-12deg);
+      border-radius: 0.25rem 0 0 0.25rem;
+      z-index: 1;
+    }
+    picture {
+      position: relative;
+      bottom: 2px;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        width: 90%;
+        height: 90%;
+      }
+    }
+    picture:hover {
+      img {
+        transform: scale(1.1);
+      }
+    }
+    .skew-background-2 {
+      position: absolute;
+      top: 10px;
+      right: -10px;
+      width: 50%;
+      background-color: rgba(16, 16, 28, 0.4);
+      height: 3rem;
+      padding-right: 10px;
+      transform: skewX(-12deg);
+      border-radius: 0 0.25rem 0.25rem 0;
+      z-index: 1;
+    }
+  }
+  .search-bar:hover {
+    .skew-background-1 {
+      background-color: rgba(16, 16, 28, 0.8);
+    }
+    .skew-background-2 {
+      background-color: rgba(16, 16, 28, 0.8);
+    }
+  }
+  .account {
+    display: flex;
+    padding: 5px;
+    margin-right: 1rem;
+    .profile-avatar {
+      position: relative;
+      height: 3rem;
+      margin-right: 1.2rem;
+      width: 3rem;
+      picture {
+        position: absolute;
+        top: 0.2rem;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+          width: 80%;
+          border-radius: 50%;
+        }
+      }
+      > div {
+        position: absolute;
+        top: 0.8rem;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+          width: 40%;
+          border-radius: 50%;
+        }
+      }
+    }
+    .profile-stats {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-weight: 700;
+      font-family: "Exo 2", sans-serif;
+      .user-level {
+        font-size: 11px;
+        color: #fecd19;
+        margin-bottom: 0.1rem;
+      }
+      .user-title {
+        font-size: 8px;
+        margin-bottom: 0.3rem;
+      }
+      .user-level-progress {
+        position: relative;
+        height: 0.6rem;
+        width: 3.5rem;
+        border-radius: 3px;
+        background-color: hsla(0, 0%, 100%, 0.4);
+        border-radius: 0.15rem;
+        transform: skewX(-10deg);
+        .progress-bar {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 40%;
+          background-color: #fecd19;
+          border-radius: 0.15rem;
+          overflow: hidden;
+        }
+      }
+    }
+  }
+}

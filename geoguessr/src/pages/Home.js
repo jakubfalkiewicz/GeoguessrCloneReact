@@ -1,59 +1,54 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Home.css";
+import video from "../media/main-video.mp4";
+import profileAvatar from "../media/profile-avatar.webp";
+import tier50 from "../media/tier-50.png";
+import NavbarAccount from "../components/NavbarAccount";
+
+import UpgradeBar from "../components/UpgradeBar";
 
 export default function Home() {
   return (
     <div className="home-container">
       <div className="home-main-view">
-        <div className="home-upgrade-bar">
-          <div></div>
-          <div className="free-acc-info">
-            You are on a Free-account and can play for free for 5 minutes every
-            15 minutes.
+        <UpgradeBar />
+        <div className="home-nav-bar">
+          <header>
+            <div className="logo">
+              <a title="GeoGuessr" href="/">
+                <img
+                  src="https://www.geoguessr.com/_next/static/images/logo-e108dab37292e7fec6148eb5f19bf484.svg"
+                  alt="GeoGuessr"
+                />
+              </a>
+            </div>
+            <div></div>
+            <NavbarAccount />
+          </header>
+        </div>
+        <div className="home-main">
+          <div className="video-background">
+            <video autoPlay muted>
+              <source src={video} type="video/mp4" />
+            </video>
           </div>
-          <div className="timer-upgrade">
-            <div className="timer-container">
-              <div className="timer">
-                <picture>
-                  <source
-                    srcset="https://www.geoguessr.com/_next/static/images/stopwatch-green-117bf5891a9fb89afb33d1ab0c1c5a92.avif"
-                    type="image/avif"
-                  />
-                  <source
-                    srcset="https://www.geoguessr.com/_next/static/images/stopwatch-green-16e5910a5a8768e747aa37723a0f21c3.webp"
-                    type="image/webp"
-                  />
-                  <img
-                    class="ticket-bar_stopwatchImage__5axy6"
-                    src="https://www.geoguessr.com/_next/static/images/stopwatch-green-2e27320085422df7d2496ec56fd80fc6.png"
-                    aria-hidden="true"
-                    alt=""
-                    width="20"
-                    height="20"
-                  />
-                </picture>
-                <div class="countdown-time">
-                  <span>05</span>
-                  <span>:</span>
-                  <span>00</span>
-                </div>
+          <main>
+            <div className="grid-layout">
+              <div className="game-modes">
+                <Link
+                  to="/maps"
+                  className="link"
+                  style={{ textDecoration: "none" }}
+                >
+                  SINGLEPLAYER
+                </Link>
+                <div className="link">MULTIPLAYER</div>
+                <div className="link">PARTY</div>
+                <div className="link">QUIZ</div>
               </div>
             </div>
-            <div className="upgrade">
-              <span class="upgrade-text">UPGRADE TO PRO</span>
-            </div>
-          </div>
-        </div>
-        <div className="home-nav-bar"></div>
-        <div className="home-main">
-          <Link
-            to="/maps"
-            className="link"
-            style={{ textDecoration: "none", color: "white" }}
-          >
-            Maps
-          </Link>
+          </main>
         </div>
       </div>
       <div className="home-side-bar">
