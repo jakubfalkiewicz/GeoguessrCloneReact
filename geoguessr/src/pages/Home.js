@@ -2,8 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Home.css";
 import video from "../media/main-video.mp4";
-import profileAvatar from "../media/profile-avatar.webp";
-import tier50 from "../media/tier-50.png";
 import NavbarAccount from "../components/NavbarAccount";
 
 import UpgradeBar from "../components/UpgradeBar";

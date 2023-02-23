@@ -8,7 +8,7 @@
 
   display: flex;
   .maps-main-view {
-    width: calc(100% - 3rem);
+    width: calc(100% - 3.5rem);
     background: radial-gradient(
         66.5% 221.21% at 136.03% -61.44%,
         rgba(161, 155, 217, 0.4) 0%,
@@ -28,7 +28,7 @@
     z-index: 1;
     .maps-nav-bar {
       width: 100%;
-      height: 4.5rem;
+      height: 5rem;
       header {
         height: 100%;
         display: grid;
@@ -70,7 +70,7 @@
             0 1.875rem 3.75rem -0.625rem rgb(0 0 0 / 16%);
           img {
             border-radius: 0.5rem 0.5rem 0 0;
-            height: 150px;
+            width: 280px;
             object-fit: cover;
             margin-bottom: 1rem;
           }
@@ -106,7 +106,7 @@
     top: 0;
     right: 0;
     height: 100%;
-    width: 3rem;
+    width: 3.5rem;
     background-color: rgba(16, 16, 28, 0.949);
     z-index: 1;
     .side-bar-content {

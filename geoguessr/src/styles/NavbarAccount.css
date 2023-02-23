@@ -1,9 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Titillium+Web:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@1,700&display=swap");
 .account-info {
   align-items: center;
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
-  margin-top: -3px;
+  gap: 1.2rem;
+  margin-top: -4px;
 }
 .account-info .search-bar {
   display: flex;
@@ -15,39 +17,41 @@
 }
 .account-info .search-bar .skew-background-1 {
   position: absolute;
-  top: 10px;
-  left: -10px;
+  top: 15px;
+  left: -6px;
   width: 50%;
   background-color: rgba(16, 16, 28, 0.4);
-  height: 3rem;
-  padding-left: 10px;
+  height: 3.8rem;
+  padding-left: 6px;
   transform: skewX(-12deg);
   border-radius: 0.25rem 0 0 0.25rem;
   z-index: 1;
 }
 .account-info .search-bar picture {
   position: relative;
-  bottom: 2px;
+  top: 3px;
   z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 100%;
 }
 .account-info .search-bar picture img {
-  width: 90%;
-  height: 90%;
+  width: 65%;
+  height: 65%;
 }
 .account-info .search-bar picture:hover img {
   transform: scale(1.1);
 }
 .account-info .search-bar .skew-background-2 {
   position: absolute;
-  top: 10px;
-  right: -10px;
+  top: 15px;
+  right: -6px;
   width: 50%;
   background-color: rgba(16, 16, 28, 0.4);
-  height: 3rem;
-  padding-right: 10px;
+  height: 3.8rem;
+  padding-right: 6px;
   transform: skewX(-12deg);
   border-radius: 0 0.25rem 0.25rem 0;
   z-index: 1;
@@ -61,36 +65,37 @@
 .account-info .account {
   display: flex;
   padding: 5px;
-  margin-right: 1rem;
+  margin-right: 1.5rem;
 }
 .account-info .account .profile-avatar {
   position: relative;
   height: 3rem;
-  margin-right: 1.2rem;
+  margin-right: 2rem;
   width: 3rem;
 }
 .account-info .account .profile-avatar picture {
   position: absolute;
-  top: 0.2rem;
   left: 0;
+  top: 0.2rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .account-info .account .profile-avatar picture img {
-  width: 80%;
+  width: 100%;
   border-radius: 50%;
 }
 .account-info .account .profile-avatar > div {
   position: absolute;
-  top: 0.8rem;
+  top: 1rem;
   left: 0;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .account-info .account .profile-avatar > div img {
-  width: 40%;
+  width: 45%;
+  height: 45%;
   border-radius: 50%;
 }
 .account-info .account .profile-stats {
@@ -101,22 +106,22 @@
   font-family: "Exo 2", sans-serif;
 }
 .account-info .account .profile-stats .user-level {
-  font-size: 11px;
+  font-size: 13px;
   color: #fecd19;
   margin-bottom: 0.1rem;
 }
 .account-info .account .profile-stats .user-title {
-  font-size: 8px;
-  margin-bottom: 0.3rem;
+  font-size: 0.6rem;
+  margin-bottom: 0.45rem;
 }
 .account-info .account .profile-stats .user-level-progress {
   position: relative;
-  height: 0.6rem;
-  width: 3.5rem;
+  height: 0.75rem;
+  width: 4.2rem;
   border-radius: 3px;
   background-color: hsla(0deg, 0%, 100%, 0.4);
   border-radius: 0.15rem;
-  transform: skewX(-10deg);
+  transform: skewX(-12deg);
 }
 .account-info .account .profile-stats .user-level-progress .progress-bar {
   position: absolute;
