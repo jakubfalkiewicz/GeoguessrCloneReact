@@ -21,6 +21,8 @@ const GameLogic = ({ editGame, games, maps }) => {
   const [mapSize, setMapSize] = useState(null);
   const [distance, setDistance] = useState(null);
   const [backToStart, setBackToStart] = useState(null);
+  const [prevCenter, setPrevCenter] = useState(null);
+  const [gameFinished, setGameFinished] = useState(false);
 
   let game =
     games.filter((game) => game.gameId === id)[0] ||
@@ -75,14 +77,18 @@ const GameLogic = ({ editGame, games, maps }) => {
     ],
   };
 
-  const onMapLoad = useCallback((map) => {
-    map.setOptions(mapOptions);
-    setMap(map);
+  function loadCenter(map) {
     const bounds = new window.google.maps.LatLngBounds();
     game.locations.forEach((loc) =>
       bounds.extend({ lat: loc.lat, lng: loc.lng })
     );
     map.fitBounds(bounds);
+  }
+
+  const onMapLoad = useCallback((map) => {
+    map.setOptions(mapOptions);
+    setMap(map);
+    loadCenter(map);
   }, []);
 
   const onMapClick = useCallback((e) => {
@@ -96,7 +102,6 @@ const GameLogic = ({ editGame, games, maps }) => {
 
   useEffect(() => {
     // console.log(markersLinePath);
-    console.log(markers);
     if (games.length !== 0) {
       localStorage.setItem(`game${id}`, JSON.stringify(game));
     }
@@ -183,15 +188,21 @@ const GameLogic = ({ editGame, games, maps }) => {
     if (round === game.locations.length) {
       console.log(summaryMarkers);
       const summaryMarkersFlattened = summaryMarkers.flat();
-      setGameScore(gameScore + roundScore);
       setMarkers(summaryMarkersFlattened);
       zoomFitBounds(summaryMarkersFlattened);
+      if (gameFinished === false) {
+        setGameScore(gameScore + roundScore);
+      }
+      setGameFinished(true);
     } else {
       setMarkers([]);
       setRound(round + 1);
       setMapSize(null);
       setGameScore(gameScore + roundScore);
-      map.setZoom(1);
+      setTimeout(() => {
+        loadCenter(map);
+        map.setZoom(5);
+      }, 100);
     }
   };
 
@@ -253,6 +264,7 @@ const GameLogic = ({ editGame, games, maps }) => {
           id="startingPoint"
           aria-label="Starting point"
           onClick={() => {
+            setPrevCenter({ lat: map.center.lat(), lng: map.center.lng() });
             setBackToStart(backToStart + 1);
           }}
         >
@@ -281,14 +293,14 @@ const GameLogic = ({ editGame, games, maps }) => {
               width: "250px",
             }
           }
-          zoom={1}
+          zoom={5}
           center={
             markers.length > 0
               ? {
                   lat: map.center.lat() || markers[0].lat,
                   lng: map.center.lng() || markers[0].lng,
                 }
-              : { lat: 0, lng: 0 }
+              : { lat: prevCenter?.lat || 0, lng: prevCenter?.lng || 0 }
           }
           onClick={
             markers.length !== 2 && markers.length !== 10 ? onMapClick : {}
