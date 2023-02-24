@@ -1,7 +1,7 @@
 # GeoguessrCloneReact 
 
 This is a clone of popular geographical game called 'Geoguessr'.  
-At this point it is possible to play singleplayer on two maps with randomly generated locations.
+At this point it is possible to play singleplayer on two maps with randomly generated locations.  
 Demo app: https://geoguessr-clone.netlify.app/
 
 ### Gameplay layout:
