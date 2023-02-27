@@ -55,7 +55,7 @@ const MapsList = ({ getMapsList, maps }) => {
                 </Link>
               ))
             ) : (
-              <div>MAPS LOADING...</div>
+              <div>MAPS LOADING... (can take up to a 30 seconds)</div>
             )}
           </div>
         </div>

@@ -33,7 +33,7 @@ export const sortGamesListAction = (games) => ({
 
 export const getGamesList = () => {
   return async (dispatch) => {
-    const response = await axios.get("http://localhost:5000/api/persons/");
+    const response = await axios.get("https://mongodb-api.onrender.com/games");
     const games = response.data;
     dispatch(getGamesListAction(games));
   };
@@ -47,7 +47,6 @@ export const createGame = (game) => {
       data: game,
     })
       .then((response) => {
-        console.log(response.data);
         dispatch(createGameAction(response.data));
       })
       .catch((error) => console.log(error));
@@ -73,7 +72,7 @@ export const deleteGame = (game) => {
   console.log(game);
   return async (dispatch) => {
     const response = await axios.delete(
-      `http://localhost:5000/api/persons/${game.id}`
+      `https://mongodb-api.onrender.com/games/${game.id}`
     );
     const gameToDelete = response.data;
     dispatch(deleteGameAction(gameToDelete));

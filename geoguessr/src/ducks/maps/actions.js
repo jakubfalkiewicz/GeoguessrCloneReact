@@ -43,8 +43,7 @@ export const createMap = (map) => {
   return async (dispatch) => {
     axios({
       method: "post",
-      // url: "https://mongodb-api.onrender.com/maps/",
-      url: "http://localhost:4000/maps/",
+      url: "https://mongodb-api.onrender.com/maps/",
       data: map,
     })
       .then((response) => {
@@ -58,7 +57,7 @@ export const editMap = (map) => {
   return async (dispatch) => {
     axios({
       method: "put",
-      url: `http://localhost:5000/api/persons/${map.id}`,
+      url: `https://mongodb-api.onrender.com/maps/${map.id}`,
       data: map,
     })
       .then((response) => {
@@ -72,7 +71,7 @@ export const deleteMap = (map) => {
   console.log(map);
   return async (dispatch) => {
     const response = await axios.delete(
-      `http://localhost:5000/api/persons/${map.id}`
+      `https://mongodb-api.onrender.com/maps/${map.id}`
     );
     const mapToDelete = response.data;
     dispatch(deleteMapAction(mapToDelete));

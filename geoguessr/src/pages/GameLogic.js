@@ -78,11 +78,15 @@ const GameLogic = ({ editGame, games, maps }) => {
   };
 
   function loadCenter(map) {
-    const bounds = new window.google.maps.LatLngBounds();
-    game.locations.forEach((loc) =>
-      bounds.extend({ lat: loc.lat, lng: loc.lng })
-    );
-    map.fitBounds(bounds);
+    const geocoder = new window.google.maps.Geocoder();
+    if (game?.country) {
+      geocoder.geocode({ address: game.country }, function (results, status) {
+        map.setCenter(results[0].geometry.location);
+        map.setZoom(5);
+      });
+    } else {
+      map.setZoom(1);
+    }
   }
 
   const onMapLoad = useCallback((map) => {
@@ -107,13 +111,6 @@ const GameLogic = ({ editGame, games, maps }) => {
     }
     const panorama =
       document.getElementById("panorama-container").childNodes[0];
-
-    // if (!game.pan) {
-    //   panorama.addEventListener("click", () => {
-    //     panorama.style.pointerEvents = "none";
-    //   });
-    //   panorama.click();
-    // }
   });
 
   const location = game.locations[round - 1];
@@ -151,6 +148,7 @@ const GameLogic = ({ editGame, games, maps }) => {
   const getRoundScore = (dist) => {
     //https://www.reddit.com/r/geoguessr/comments/7ekj80/for_all_my_geoguessing_math_nerds/
     const exponent = 0.9893391207 ** parseFloat(dist / 1000);
+    console.log(5000 * exponent);
     setRoundScore(parseInt(5000 * exponent) + 1);
   };
 
@@ -201,7 +199,6 @@ const GameLogic = ({ editGame, games, maps }) => {
       setGameScore(gameScore + roundScore);
       setTimeout(() => {
         loadCenter(map);
-        map.setZoom(5);
       }, 100);
     }
   };

@@ -22,11 +22,11 @@ const MapDetails = ({ maps, createGame, getMapsList }) => {
   const [pan, setPan] = useState(true);
   const [zoom, setZoom] = useState(true);
 
-  const createNewGame = () => {
+  const createNewGame = async () => {
     const random = map.locationsList
       .sort(() => 0.5 - Math.random())
       .slice(0, 5);
-    createGame({
+    await createGame({
       gameId: newGameID,
       time: 0,
       player: "639c73bbb0ef36ed25560b5d",
@@ -38,9 +38,10 @@ const MapDetails = ({ maps, createGame, getMapsList }) => {
       currentRound: 1,
       roundsList: [],
       timesList: [],
+      country: map?.country,
     });
     const start = document.getElementById("start");
-    setTimeout(() => start.click(), 1500);
+    setTimeout(() => start.click(), 1000);
   };
 
   return (
@@ -58,7 +59,7 @@ const MapDetails = ({ maps, createGame, getMapsList }) => {
       <div className="menu-options">
         <div className="white start">Start a new game</div>
 
-        <div className="options-container">
+        {/* <div className="options-container">
           <div className="switch-col">
             <div>MOVE</div>
             <input
@@ -83,7 +84,7 @@ const MapDetails = ({ maps, createGame, getMapsList }) => {
               onChange={() => setZoom(!zoom)}
             />
           </div>
-        </div>
+        </div> */}
         <button id="startGame" onClick={() => createNewGame()}>
           START GAME
         </button>

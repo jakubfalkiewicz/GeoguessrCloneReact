@@ -1,10 +1,10 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import MapsList from "./MapsList";
-import MapDetails from "./MapDetails";
-import NewMap from "./NewMap";
+// import MapsList from "./MapsList";
+
 import NotFound from "./NotFound";
-import Map from "./Map";
+import GameLogic from "../pages/GameLogic";
+import GameSummary from "../pages/GameSummary";
 import { LoadScript } from "@react-google-maps/api";
 
 export default function MapRoutes() {
@@ -13,17 +13,16 @@ export default function MapRoutes() {
   return (
     <div>
       <Routes>
-        <Route index element={<MapsList />} />
-        <Route path=":id" element={<MapDetails />} />
-        <Route path="new" element={<NewMap />} />
+        {/* <Route index element={<MapsList />} /> */}
         <Route
-          path="test"
+          path=":id"
           element={
             <LoadScript googleMapsApiKey={key} libraries={lib}>
-              <Map />
+              <GameLogic />
             </LoadScript>
           }
         />
+        <Route path="summary" element={<GameSummary />} />
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </div>

@@ -119,7 +119,7 @@
   height: 0.75rem;
   width: 4.2rem;
   border-radius: 3px;
-  background-color: hsla(0deg, 0%, 100%, 0.4);
+  background-color: hsla(0, 0%, 100%, 0.4);
   border-radius: 0.15rem;
   transform: skewX(-12deg);
 }
