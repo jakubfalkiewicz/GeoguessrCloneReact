@@ -7,6 +7,7 @@ import NavbarAccount from "../components/NavbarAccount";
 import poland from "../media/poland-map.jpg";
 import pomerania from "../media/pomerania-map.jpg";
 import "../styles/MapsList.css";
+import { v4 as uuidv4 } from "uuid";
 
 const MapsList = ({ getMapsList, maps }) => {
   useEffect(() => {
@@ -14,6 +15,7 @@ const MapsList = ({ getMapsList, maps }) => {
       getMapsList();
     }
   });
+  const newGameID = uuidv4();
   console.log(maps);
   return (
     <div className="maps-container">
@@ -40,6 +42,7 @@ const MapsList = ({ getMapsList, maps }) => {
                 <Link
                   key={el._id}
                   to={el._id}
+                  state={{ gameID: newGameID }}
                   style={{ textDecoration: "none", cursor: "auto" }}
                 >
                   <div className="map" id={el._id}>

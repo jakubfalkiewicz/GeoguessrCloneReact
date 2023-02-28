@@ -3,7 +3,8 @@ import profileAvatar from "../media/profile-avatar.webp";
 import tier50 from "../media/tier-50.png";
 import "../styles/NavbarAccount.css";
 
-export default function NavbarAccount() {
+export default function NavbarAccount({ user }) {
+  console.log(user);
   return (
     <div className="account-info">
       <div className="search-bar">

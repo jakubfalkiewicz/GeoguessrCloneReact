@@ -18,27 +18,26 @@ import WelcomePage from "./pages/WelcomePage";
 function App({ users, maps, games }) {
   const [user, setUser] = useState(null);
   const loggedUser = useSelector(getUser);
-  if (loggedUser) {
-    setUser(loggedUser);
-  } else {
-    setUser(JSON.parse(localStorage.getItem("user")));
+  // console.log(loggedUser);
+  if (!user) {
+    if (loggedUser) {
+      setUser(loggedUser);
+    }
+    if (localStorage.getItem("user")) {
+      setUser(JSON.parse(localStorage.getItem("user")));
+    }
   }
-
   // useEffect(() => {
-  //   if (users.length < 1) {
-  //     getUsersList();
-  //   }
-  //   if (maps.length < 1) {
-  //     getMapsList();
-  //   }
-  //   if (games.length < 1) {
-  //     getGamesList();
-  //   }
-  // }, [users, maps, games]);
+  //   console.log(user);
+  // }, [user]);
 
   return (
     <Routes>
-      <Route path="/" element={user ? <Home /> : <WelcomePage />}></Route>
+      <Route
+        path="/"
+        element={<Home />}
+        // element={user ? <Home user={user} /> : <WelcomePage />}
+      ></Route>
       <Route path="/signup" element={<SignUp />}></Route>
       <Route path="/login" element={<LogIn />}></Route>
       <Route path="/maps/*" element={<MapRoutes />}></Route>

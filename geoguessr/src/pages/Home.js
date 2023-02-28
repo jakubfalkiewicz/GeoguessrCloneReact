@@ -5,7 +5,7 @@ import video from "../media/main-video.mp4";
 import NavbarAccount from "../components/NavbarAccount";
 import UpgradeBar from "../components/UpgradeBar";
 
-export default function Home() {
+export default function Home({ user }) {
   return (
     <div className="home-container">
       <div className="home-main-view">
@@ -21,7 +21,7 @@ export default function Home() {
               </a>
             </div>
             <div></div>
-            <NavbarAccount />
+            <NavbarAccount user={user} />
           </header>
         </div>
         <div className="home-main">

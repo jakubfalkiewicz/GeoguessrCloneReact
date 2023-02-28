@@ -390,6 +390,7 @@ const GameLogic = ({ editGame, games, maps }) => {
 };
 
 const mapStateToProps = (state, props) => {
+  console.log(state.games);
   return {
     games: state.games,
     maps: state.maps,

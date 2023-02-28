@@ -1,39 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import { Link } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
+import { Link, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 import { createGame } from "../ducks/games/actions";
 import { getMapsList } from "../ducks/maps/actions";
 
 const MapDetails = ({ maps, createGame, getMapsList }) => {
-  //REDUX CLEARS STATE WHEN GOING BACK - to fix
   useEffect(() => {
     if (maps.length === 0) {
       getMapsList();
     }
-  });
-  const newGameID = uuidv4();
+    window.addEventListener("popstate", () => {
+      window.location.reload();
+    });
+  }, []);
+
+  const location = useLocation();
+  const { gameID } = location.state;
   const { id } = useParams();
-  // console.log(id);
   const map = maps.filter((map) => map._id === id)[0];
-  // console.log(maps);
   const [move, setMove] = useState(true);
-  const [pan, setPan] = useState(true);
-  const [zoom, setZoom] = useState(true);
+  // const [pan, setPan] = useState(true);
+  // const [zoom, setZoom] = useState(true);
 
   const createNewGame = async () => {
     const random = map.locationsList
       .sort(() => 0.5 - Math.random())
       .slice(0, 5);
     await createGame({
-      gameId: newGameID,
+      gameId: gameID,
       time: 0,
       player: "639c73bbb0ef36ed25560b5d",
       mapId: id,
       move: move,
-      pan: pan,
-      zoom: zoom,
+      pan: true,
+      zoom: true,
       locations: random,
       currentRound: 1,
       roundsList: [],
@@ -41,7 +42,7 @@ const MapDetails = ({ maps, createGame, getMapsList }) => {
       country: map?.country,
     });
     const start = document.getElementById("start");
-    setTimeout(() => start.click(), 1000);
+    setTimeout(() => start.click(), 3000);
   };
 
   return (
@@ -59,7 +60,7 @@ const MapDetails = ({ maps, createGame, getMapsList }) => {
       <div className="menu-options">
         <div className="white start">Start a new game</div>
 
-        {/* <div className="options-container">
+        <div className="options-container">
           <div className="switch-col">
             <div>MOVE</div>
             <input
@@ -68,7 +69,7 @@ const MapDetails = ({ maps, createGame, getMapsList }) => {
               onChange={() => setMove(!move)}
             />
           </div>
-          <div className="switch-col">
+          {/* <div className="switch-col">
             <div>PAN</div>
             <input
               type="checkbox"
@@ -83,12 +84,12 @@ const MapDetails = ({ maps, createGame, getMapsList }) => {
               checked={zoom}
               onChange={() => setZoom(!zoom)}
             />
-          </div>
-        </div> */}
-        <button id="startGame" onClick={() => createNewGame()}>
+          </div> */}
+        </div>
+        <button id="startGame" onClick={() => createNewGame(gameID)}>
           START GAME
         </button>
-        <Link id="start" to={`../../game/${newGameID}`}></Link>
+        <Link id="start" to={`../../game/${gameID}`}></Link>
       </div>
     </div>
   );

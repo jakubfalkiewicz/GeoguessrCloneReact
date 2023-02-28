@@ -34,6 +34,7 @@ export const sortMapsListAction = (maps) => ({
 export const getMapsList = () => {
   return async (dispatch) => {
     const response = await axios.get("https://mongodb-api.onrender.com/maps/");
+    // const response = await axios.get("http://localhost:4000/maps/");
     const maps = response.data;
     dispatch(getMapsListAction(maps));
   };
