@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import "../styles/Home.css";
 import video from "../media/main-video.mp4";
 import NavbarAccount from "../components/NavbarAccount";
-
 import UpgradeBar from "../components/UpgradeBar";
 
 export default function Home() {

@@ -1,5 +1,5 @@
 import types from "./types";
-import axios from "axios";
+import axios from "../../axios";
 
 export const getMapsListAction = (maps) => ({
   type: types.GET_MAPS_LIST,

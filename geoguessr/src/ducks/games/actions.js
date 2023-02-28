@@ -1,5 +1,5 @@
 import types from "./types";
-import axios from "axios";
+import axios from "../../axios";
 
 export const getGamesListAction = (games) => ({
   type: types.GET_GAMES_LIST,
