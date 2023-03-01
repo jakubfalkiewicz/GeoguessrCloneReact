@@ -6,7 +6,7 @@ import UpgradeBar from "../components/UpgradeBar";
 import NavbarAccount from "../components/NavbarAccount";
 import poland from "../media/poland-map.jpg";
 import pomerania from "../media/pomerania-map.jpg";
-import "../styles/MapsList.css";
+import "../styles/MapsList.scss";
 import { v4 as uuidv4 } from "uuid";
 
 const MapsList = ({ getMapsList, maps }) => {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../styles/SignUp.css";
+import "../styles/SignUp.scss";
 import { connect } from "react-redux";
 import { loginUser } from "../ducks/auth/actions";
 import { useNavigate } from "react-router";

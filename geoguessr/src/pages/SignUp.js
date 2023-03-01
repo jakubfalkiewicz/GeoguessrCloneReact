@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/SignUp.css";
+import "../styles/SignUp.scss";
 import { createUser } from "../ducks/users/actions";
 import { connect } from "react-redux";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/UpgradeBar.css";
+import "../styles/UpgradeBar.scss";
 
 export default function UpgradeBar() {
   return (

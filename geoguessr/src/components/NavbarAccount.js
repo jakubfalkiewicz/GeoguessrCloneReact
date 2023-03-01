@@ -1,7 +1,7 @@
 import React from "react";
 import profileAvatar from "../media/profile-avatar.webp";
 import tier50 from "../media/tier-50.png";
-import "../styles/NavbarAccount.css";
+import "../styles/NavbarAccount.scss";
 
 export default function NavbarAccount({ user }) {
   console.log(user);
