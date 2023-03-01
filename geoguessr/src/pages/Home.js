@@ -36,6 +36,7 @@ export default function Home({ user }) {
                 <Link
                   to="/maps"
                   className="link"
+                  state={{ user: user }}
                   style={{ textDecoration: "none" }}
                 >
                   SINGLEPLAYER

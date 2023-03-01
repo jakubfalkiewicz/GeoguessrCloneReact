@@ -10,7 +10,7 @@ import {
 } from "@react-google-maps/api";
 import { Link } from "react-router-dom";
 
-const GameLogic = ({ editGame, games, maps }) => {
+const GameLogic = ({ editGame, games }) => {
   const [round, setRound] = useState(1);
   const [roundScore, setRoundScore] = useState(0);
   const [gameScore, setGameScore] = useState(0);
@@ -171,7 +171,8 @@ const GameLogic = ({ editGame, games, maps }) => {
     game.currentRound++;
     game.roundsList.push([solutionPosition, markerPosition]);
 
-    editGame(game);
+    //State reset to fix
+    editGame({ round: markerPosition, id: game._id });
     setDistance(distance);
     addSolutionMarker();
     zoomFitBounds([solutionPosition, markerPosition]);
@@ -390,10 +391,8 @@ const GameLogic = ({ editGame, games, maps }) => {
 };
 
 const mapStateToProps = (state, props) => {
-  console.log(state.games);
   return {
     games: state.games,
-    maps: state.maps,
   };
 };
 

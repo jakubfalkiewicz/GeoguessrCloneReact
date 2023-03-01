@@ -5,6 +5,20 @@ import "../styles/NavbarAccount.css";
 
 export default function NavbarAccount({ user }) {
   console.log(user);
+  function calculateLevel(experience) {
+    let level = 0;
+    let requiredExp = 0;
+    while (experience >= requiredExp) {
+      level++;
+      requiredExp = level * (level + 1) * 50;
+    }
+    let levelExp = (level - 1) * level * 50;
+    return {
+      level: level - 1,
+      experienceBar: ((experience - levelExp) / (requiredExp - levelExp)) * 100,
+    };
+  }
+  const userExp = calculateLevel(user.experience);
   return (
     <div className="account-info">
       <div className="search-bar">
@@ -27,10 +41,15 @@ export default function NavbarAccount({ user }) {
           </picture>
         </div>
         <div className="profile-stats">
-          <div className="user-level">LVL 46</div>
+          <div className="user-level">LVL {userExp.level}</div>
           <div className="user-title">VOYAGER</div>
           <div className="user-level-progress">
-            <div className="progress-bar"></div>
+            <div
+              className="progress-bar"
+              style={{
+                width: userExp.experienceBar + "%",
+              }}
+            ></div>
           </div>
         </div>
       </div>

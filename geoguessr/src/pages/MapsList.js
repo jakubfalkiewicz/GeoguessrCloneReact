@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { getMapsList } from "../ducks/maps/actions";
 import UpgradeBar from "../components/UpgradeBar";
 import NavbarAccount from "../components/NavbarAccount";
@@ -17,6 +17,8 @@ const MapsList = ({ getMapsList, maps }) => {
   });
   const newGameID = uuidv4();
   console.log(maps);
+  let { state } = useLocation();
+  console.log(state.user);
   return (
     <div className="maps-container">
       <div className="maps-main-view">
@@ -32,7 +34,7 @@ const MapsList = ({ getMapsList, maps }) => {
               </a>
             </div>
             <div></div>
-            <NavbarAccount />
+            <NavbarAccount user={state.user} />
           </header>
         </div>
         <div className="maps-main">
@@ -47,6 +49,7 @@ const MapsList = ({ getMapsList, maps }) => {
                 >
                   <div className="map" id={el._id}>
                     <img
+                      alt="map-img"
                       src={el.name === "Tricity areas" ? pomerania : poland}
                     ></img>
                     <div>{el.name}</div>

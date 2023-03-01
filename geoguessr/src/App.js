@@ -5,7 +5,7 @@ import NotFound from "./components/NotFound";
 import MapRoutes from "./components/MapRoutes";
 import GameRoutes from "./components/GameRoutes";
 import SignUp from "./pages/SignUp";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { connect } from "react-redux";
 import { getUsersList } from "./ducks/users/actions";
 import { getMapsList } from "./ducks/maps/actions";
@@ -27,16 +27,13 @@ function App({ users, maps, games }) {
       setUser(JSON.parse(localStorage.getItem("user")));
     }
   }
-  // useEffect(() => {
-  //   console.log(user);
-  // }, [user]);
 
   return (
     <Routes>
       <Route
         path="/"
-        element={<Home />}
-        // element={user ? <Home user={user} /> : <WelcomePage />}
+        // element={<Home />}
+        element={user ? <Home user={user} /> : <WelcomePage />}
       ></Route>
       <Route path="/signup" element={<SignUp />}></Route>
       <Route path="/login" element={<LogIn />}></Route>

@@ -17,7 +17,7 @@ export const createGameAction = (game) => ({
 });
 
 export const editGameAction = (game) => ({
-  type: types.GAME_EDIT,
+  type: types.GAME_ROUND,
   payload: game,
 });
 
@@ -57,8 +57,10 @@ export const editGame = (game) => {
   console.log(game);
   return async (dispatch) => {
     axios({
-      method: "put",
-      url: `https://mongodb-api.onrender.com/games/${game.id}`,
+      method: "patch",
+      // url: `https://mongodb-api.onrender.com/games/gameRound/${game.id}`,
+      url: `http://localhost:4000/games/gameRound/${game.id}`,
+      // const response = await axios.get("http://localhost:4000/maps/");
       data: game,
     })
       .then((response) => {
