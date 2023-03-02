@@ -54,13 +54,11 @@ export const createGame = (game) => {
 };
 
 export const editGame = (game) => {
-  console.log(game);
   return async (dispatch) => {
     axios({
       method: "patch",
-      // url: `https://mongodb-api.onrender.com/games/gameRound/${game.id}`,
-      url: `http://localhost:4000/games/gameRound/${game.id}`,
-      // const response = await axios.get("http://localhost:4000/maps/");
+      url: `https://mongodb-api.onrender.com/games/gameRound/${game.id}`,
+      // url: `http://localhost:4000/games/gameRound/${game.id}`,
       data: game,
     })
       .then((response) => {

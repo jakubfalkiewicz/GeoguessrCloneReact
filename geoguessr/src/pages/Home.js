@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Home.scss";
 import video from "../media/main-video.mp4";
+import backgroundImg from "../media/background-img.jpg";
 import NavbarAccount from "../components/NavbarAccount";
 import UpgradeBar from "../components/UpgradeBar";
 
@@ -26,10 +27,13 @@ export default function Home({ user }) {
         </div>
         <div className="home-main">
           <div className="video-background">
+            <img src={backgroundImg}></img>
             <video autoPlay muted>
               <source src={video} type="video/mp4" />
             </video>
           </div>
+          <div className="bg-color-match"></div>
+
           <main>
             <div className="grid-layout">
               <div className="game-modes">

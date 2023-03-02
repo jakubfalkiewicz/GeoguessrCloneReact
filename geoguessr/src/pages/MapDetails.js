@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { createGame } from "../ducks/games/actions";
 import { getMapsList } from "../ducks/maps/actions";
+import { v4 as uuidv4 } from "uuid";
 
-const MapDetails = ({ maps, createGame, getMapsList }) => {
+const MapDetails = ({ maps, createGame }) => {
+  const [gameID, setGameID] = useState(uuidv4());
   useEffect(() => {
     if (maps.length === 0) {
-      getMapsList();
+      setGameID(uuidv4());
     }
     window.addEventListener("popstate", () => {
       window.location.reload();
     });
   }, []);
 
-  const location = useLocation();
-  const { gameID } = location.state;
   const { id } = useParams();
   const map = maps.filter((map) => map._id === id)[0];
   const [move, setMove] = useState(true);

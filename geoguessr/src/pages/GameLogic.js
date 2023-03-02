@@ -148,7 +148,6 @@ const GameLogic = ({ editGame, games }) => {
   const getRoundScore = (dist) => {
     //https://www.reddit.com/r/geoguessr/comments/7ekj80/for_all_my_geoguessing_math_nerds/
     const exponent = 0.9893391207 ** parseFloat(dist / 1000);
-    console.log(5000 * exponent);
     setRoundScore(parseInt(5000 * exponent) + 1);
   };
 
@@ -172,7 +171,7 @@ const GameLogic = ({ editGame, games }) => {
     game.roundsList.push([solutionPosition, markerPosition]);
 
     //State reset to fix
-    editGame({ round: markerPosition, id: game._id });
+    // editGame({ round: markerPosition, id: game._id });
     setDistance(distance);
     addSolutionMarker();
     zoomFitBounds([solutionPosition, markerPosition]);

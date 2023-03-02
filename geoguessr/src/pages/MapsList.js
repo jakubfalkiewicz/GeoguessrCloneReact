@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { getMapsList } from "../ducks/maps/actions";
@@ -7,18 +7,10 @@ import NavbarAccount from "../components/NavbarAccount";
 import poland from "../media/poland-map.jpg";
 import pomerania from "../media/pomerania-map.jpg";
 import "../styles/MapsList.scss";
-import { v4 as uuidv4 } from "uuid";
+import numeral from "numeral";
 
-const MapsList = ({ getMapsList, maps }) => {
-  useEffect(() => {
-    if (maps.length === 0) {
-      getMapsList();
-    }
-  });
-  const newGameID = uuidv4();
-  console.log(maps);
+const MapsList = ({ maps }) => {
   let { state } = useLocation();
-  console.log(state.user);
   return (
     <div className="maps-container">
       <div className="maps-main-view">
@@ -44,7 +36,6 @@ const MapsList = ({ getMapsList, maps }) => {
                 <Link
                   key={el._id}
                   to={el._id}
-                  state={{ gameID: newGameID }}
                   style={{ textDecoration: "none", cursor: "auto" }}
                 >
                   <div className="map" id={el._id}>
@@ -56,7 +47,10 @@ const MapsList = ({ getMapsList, maps }) => {
                     <button>PLAY</button>
                     {/* <div>{el.description}</div> */}
                     {/* <div>{el.likes} likes</div> */}
-                    {/* <div>{el.locationsList.length} locations</div> */}
+                    <div className="map-details">
+                      {numeral(el.locationsList.length).format("0.0a")}{" "}
+                      locations
+                    </div>
                   </div>
                 </Link>
               ))
@@ -65,8 +59,8 @@ const MapsList = ({ getMapsList, maps }) => {
             )}
           </div>
         </div>
-        <div className="home-side-bar">
-          <div className="sidie-bar-content"></div>
+        <div className="maps-side-bar">
+          <div className="side-bar-content"></div>
         </div>
       </div>
     </div>

@@ -66,3 +66,57 @@
     }
   }
 }
+@media only screen and (max-width: 1024px) {
+  .home-upgrade-bar {
+    display: flex;
+    justify-content: space-between;
+    .empty {
+      display: none;
+    }
+  }
+}
+@media only screen and (max-width: 680px) {
+  .home-upgrade-bar {
+    display: flex;
+    padding: 0.6rem 1rem;
+    .free-acc-info {
+      display: none;
+    }
+    .timer-upgrade {
+      width: 100%;
+      justify-content: space-between;
+      .timer-container {
+        .timer {
+          picture {
+            img {
+              width: 24px;
+              height: 24px;
+              display: flex;
+              margin-right: 5px;
+            }
+          }
+          .countdown-time {
+            font-family: "Exo 2", sans-serif;
+            line-height: 1rem;
+          }
+        }
+      }
+      .upgrade {
+        font-size: 0.8rem;
+        background-color: #6cb928;
+        padding: 0.4rem 1rem 0.4rem 1rem;
+        border-radius: 1rem;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        .upgrade-text {
+          font-weight: 700;
+          white-space: nowrap;
+          font-family: "Exo 2", sans-serif;
+        }
+      }
+      .upgrade:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+}

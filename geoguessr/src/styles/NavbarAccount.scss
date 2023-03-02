@@ -2,6 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@1,700&display=swap");
 .account-info {
   align-items: center;
+  width: 100%;
   display: flex;
   justify-content: flex-end;
   gap: 1.2rem;
@@ -133,6 +134,20 @@
           border-radius: 0.15rem;
           overflow: hidden;
         }
+      }
+    }
+  }
+}
+@media only screen and (max-width: 680px) {
+  .account-info {
+    gap: 0.5rem;
+    .account {
+      margin: 0;
+      .profile-avatar {
+        margin: 0;
+      }
+      .profile-stats {
+        display: none;
       }
     }
   }

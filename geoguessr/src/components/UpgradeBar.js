@@ -4,7 +4,7 @@ import "../styles/UpgradeBar.scss";
 export default function UpgradeBar() {
   return (
     <div className="home-upgrade-bar">
-      <div></div>
+      <div className="empty"></div>
       <div className="free-acc-info">
         You are on a Free-account and can play for free for 5 minutes every 15
         minutes.
