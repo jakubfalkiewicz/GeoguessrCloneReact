@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { connect } from "react-redux";
 import { getGamesList, editGame } from "../ducks/games/actions";
 import {
@@ -29,6 +29,7 @@ const GameLogic = ({ editGame, games }) => {
     JSON.parse(localStorage.getItem(`game${id}`));
 
   // setRound(game.currentRound)
+  const navigate = useNavigate();
 
   //REACT-GOOGLE-MAPS-COMPONENTS-OPTIONS
   const mapOptions = {
@@ -377,9 +378,7 @@ const GameLogic = ({ editGame, games }) => {
             </button>
             {summaryMarkers.length === 5 && (
               <Link to={`../../maps/${game.mapId}`}>
-                <button id="playAgain" onClick={() => nextRound()}>
-                  PLAY AGAIN
-                </button>
+                <button id="playAgain">PLAY AGAIN</button>
               </Link>
             )}
           </div>

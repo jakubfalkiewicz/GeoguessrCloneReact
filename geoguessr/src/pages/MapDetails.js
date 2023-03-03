@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { createGame } from "../ducks/games/actions";
+import { createGameAction } from "../ducks/games/actions";
 import { getMapsList } from "../ducks/maps/actions";
 import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 
-const MapDetails = ({ maps, createGame }) => {
+const MapDetails = ({ maps, createGameAction }) => {
   const [gameID, setGameID] = useState(uuidv4());
   useEffect(() => {
     if (maps.length === 0) {
@@ -27,7 +28,7 @@ const MapDetails = ({ maps, createGame }) => {
     const random = map.locationsList
       .sort(() => 0.5 - Math.random())
       .slice(0, 5);
-    await createGame({
+    const game = {
       gameId: gameID,
       time: 0,
       player: "639c73bbb0ef36ed25560b5d",
@@ -40,9 +41,18 @@ const MapDetails = ({ maps, createGame }) => {
       roundsList: [],
       timesList: [],
       country: map?.country,
-    });
-    const start = document.getElementById("start");
-    setTimeout(() => start.click(), 3000);
+    };
+    axios({
+      method: "post",
+      url: "https://mongodb-api.onrender.com/games",
+      data: game,
+    })
+      .then((response) => {
+        createGameAction(response.data);
+        const start = document.getElementById("start");
+        start.click();
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -102,7 +112,7 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = {
-  createGame,
+  createGameAction,
   getMapsList,
 };
 
