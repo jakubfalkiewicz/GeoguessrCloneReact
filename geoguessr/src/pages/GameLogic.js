@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { connect } from "react-redux";
 import { getGamesList, editGame } from "../ducks/games/actions";
 import {
@@ -9,6 +9,7 @@ import {
   Polyline,
 } from "@react-google-maps/api";
 import { Link } from "react-router-dom";
+import "../styles/GameLogic.scss";
 
 const GameLogic = ({ editGame, games }) => {
   const [round, setRound] = useState(1);
@@ -23,13 +24,11 @@ const GameLogic = ({ editGame, games }) => {
   const [backToStart, setBackToStart] = useState(null);
   const [prevCenter, setPrevCenter] = useState(null);
   const [gameFinished, setGameFinished] = useState(false);
+  const [hidden, setHidden] = useState(true);
 
   let game =
     games.filter((game) => game.gameId === id)[0] ||
     JSON.parse(localStorage.getItem(`game${id}`));
-
-  // setRound(game.currentRound)
-  const navigate = useNavigate();
 
   //REACT-GOOGLE-MAPS-COMPONENTS-OPTIONS
   const mapOptions = {
@@ -94,6 +93,8 @@ const GameLogic = ({ editGame, games }) => {
     map.setOptions(mapOptions);
     setMap(map);
     loadCenter(map);
+    // const streetViewLayer = new window.google.maps.StreetViewCoverageLayer();
+    // streetViewLayer.setMap(map);
   }, []);
 
   const onMapClick = useCallback((e) => {
@@ -282,7 +283,14 @@ const GameLogic = ({ editGame, games }) => {
           </div>
         </div>
       </div>
-      <div id={"map-container"} className={markers.length > 1 ? "active" : ""}>
+      <div
+        id={"map-container"}
+        className={
+          markers.length > 1
+            ? `active ${hidden ? "hidden" : ""}`
+            : `${hidden ? "hidden" : ""}`
+        }
+      >
         <GoogleMap
           id="map"
           mapContainerStyle={
@@ -338,6 +346,9 @@ const GameLogic = ({ editGame, games }) => {
               />
             ))}
         </GoogleMap>
+        <div className="cancel" onClick={() => setHidden(!hidden)}>
+          X
+        </div>
         {(markers.length === 0 || markers.length % 2 !== 0) && (
           <button
             id="confirmButton"

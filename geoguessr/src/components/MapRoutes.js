@@ -8,7 +8,6 @@ import Map from "../pages/Map";
 import { LoadScript } from "@react-google-maps/api";
 
 export default function MapRoutes() {
-  const lib = ["places"];
   const key = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
   return (
     <div>
@@ -19,7 +18,7 @@ export default function MapRoutes() {
         <Route
           path="test"
           element={
-            <LoadScript googleMapsApiKey={key} libraries={lib}>
+            <LoadScript googleMapsApiKey={key}>
               <Map />
             </LoadScript>
           }

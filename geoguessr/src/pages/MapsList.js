@@ -36,6 +36,7 @@ const MapsList = ({ maps }) => {
                 <Link
                   key={el._id}
                   to={el._id}
+                  state={{ user: state.user }}
                   style={{ textDecoration: "none", cursor: "auto" }}
                 >
                   <div className="map" id={el._id}>
@@ -55,7 +56,7 @@ const MapsList = ({ maps }) => {
                 </Link>
               ))
             ) : (
-              <div>MAPS LOADING... (can take up to a 30 seconds)</div>
+              <div>MAPS LOADING... (can take up to 30 seconds)</div>
             )}
           </div>
         </div>

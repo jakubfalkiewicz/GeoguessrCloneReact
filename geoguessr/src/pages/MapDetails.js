@@ -1,14 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router";
+import React, { useState, useEffect } from "react";
+import { useParams, useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { createGameAction } from "../ducks/games/actions";
 import { getMapsList } from "../ducks/maps/actions";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
+import "../styles/MapDetails.scss";
+import NavbarAccount from "../components/NavbarAccount";
+import UpgradeBar from "../components/UpgradeBar";
 
 const MapDetails = ({ maps, createGameAction }) => {
   const [gameID, setGameID] = useState(uuidv4());
+  let { state } = useLocation();
   useEffect(() => {
     if (maps.length === 0) {
       setGameID(uuidv4());
@@ -56,30 +60,47 @@ const MapDetails = ({ maps, createGameAction }) => {
   };
 
   return (
-    <div>
-      {map && map.locationsList ? (
-        <div>
-          <div>Map {id}</div>
-          <div>{map.name}</div>
-          <div>{map.description}</div>
-          <div>{map.locationsList.length} locations</div>
+    <div className="details-container">
+      <div className="details-main-view">
+        <UpgradeBar />
+        <div className="details-nav-bar">
+          <header>
+            <div className="logo">
+              <a title="GeoGuessr" href="/">
+                <img
+                  src="https://www.geoguessr.com/_next/static/images/logo-e108dab37292e7fec6148eb5f19bf484.svg"
+                  alt="GeoGuessr"
+                />
+              </a>
+            </div>
+            <div></div>
+            <NavbarAccount user={state.user} />
+          </header>
         </div>
-      ) : (
-        <div>Loading...</div>
-      )}
-      <div className="menu-options">
-        <div className="white start">Start a new game</div>
-
-        <div className="options-container">
-          <div className="switch-col">
-            <div>MOVE</div>
-            <input
-              type="checkbox"
-              checked={move}
-              onChange={() => setMove(!move)}
-            />
-          </div>
-          {/* <div className="switch-col">
+        <div className="details-main">
+          {map && map.locationsList ? (
+            <div className="details-info">
+              <div className="title">{map.name}</div>
+              <div>{map.description}</div>
+              <div>{map.locationsList.length} locations</div>
+            </div>
+          ) : (
+            <div>Loading...</div>
+          )}
+          <div className="menu-options">
+            <div className="options">
+              <div></div>GAME SETTINGS<div></div>
+            </div>
+            <div className="options-container">
+              <div className="switch-col">
+                <div>MOVE</div>
+                <input
+                  type="checkbox"
+                  checked={move}
+                  onChange={() => setMove(!move)}
+                />
+              </div>
+              {/* <div className="switch-col">
             <div>PAN</div>
             <input
               type="checkbox"
@@ -95,11 +116,20 @@ const MapDetails = ({ maps, createGameAction }) => {
               onChange={() => setZoom(!zoom)}
             />
           </div> */}
+            </div>
+            <button
+              id="startGame"
+              className="start-game"
+              onClick={() => createNewGame(gameID)}
+            >
+              START GAME!
+            </button>
+            <Link id="start" to={`../../game/${gameID}`}></Link>
+          </div>
         </div>
-        <button id="startGame" onClick={() => createNewGame(gameID)}>
-          START GAME
-        </button>
-        <Link id="start" to={`../../game/${gameID}`}></Link>
+        <div className="maps-side-bar">
+          <div className="side-bar-content"></div>
+        </div>
       </div>
     </div>
   );
