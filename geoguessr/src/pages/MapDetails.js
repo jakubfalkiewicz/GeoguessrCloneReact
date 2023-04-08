@@ -45,6 +45,7 @@ const MapDetails = ({ maps, createGameAction }) => {
       roundsList: [],
       timesList: [],
       country: map?.country,
+      zoomLevel: map?.zoomLevel,
     };
     axios({
       method: "post",
