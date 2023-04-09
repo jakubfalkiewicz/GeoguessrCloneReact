@@ -150,8 +150,12 @@ const GameLogic = ({ editGame, games }) => {
 
   const getRoundScore = (dist) => {
     //https://www.reddit.com/r/geoguessr/comments/7ekj80/for_all_my_geoguessing_math_nerds/
-    const exponent = 0.9893391207 ** parseFloat(dist / 1000);
-    setRoundScore(parseInt(5000 * exponent) + 1);
+    const exponent = Math.E ** -parseFloat(dist / (1000 * game.exponent));
+    const score = parseInt(5000 * exponent) + 1;
+    if (exponent < 10 && 5000 - score < 3) {
+      setRoundScore(5000);
+    }
+    setRoundScore(score);
   };
 
   const handleGuess = () => {
