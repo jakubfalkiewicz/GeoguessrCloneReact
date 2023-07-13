@@ -39,7 +39,7 @@ export default function Home({ user }) {
               <div className="game-modes">
                 <Link
                   to="/maps"
-                  className="link"
+                  className="link glowing-text"
                   state={{ user: user }}
                   style={{ textDecoration: "none" }}
                 >

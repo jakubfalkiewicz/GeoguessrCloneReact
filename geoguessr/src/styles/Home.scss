@@ -114,6 +114,22 @@
               cursor: pointer;
               color: #a19bd9;
               transform: scale(1.009);
+              text-shadow: 0 0 20px #a19bd9;
+            }
+            .glowing-text {
+              animation: glowing 3s infinite;
+            }
+
+            @keyframes glowing {
+              0% {
+                text-shadow: 0 0 10px #a19bd9;
+              }
+              50% {
+                text-shadow: 0 0 20px #a19bd9, 0 0 30px #a19bd9;
+              }
+              100% {
+                text-shadow: 0 0 10px #a19bd9;
+              }
             }
           }
         }

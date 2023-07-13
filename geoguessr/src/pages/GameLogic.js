@@ -82,7 +82,6 @@ const GameLogic = ({ editGame, games }) => {
     if (game?.country) {
       geocoder.geocode({ address: game.country }, function (results, status) {
         map.setCenter(results[0].geometry.location);
-        console.log(game);
         map.setZoom(game.zoomLevel);
       });
     } else {

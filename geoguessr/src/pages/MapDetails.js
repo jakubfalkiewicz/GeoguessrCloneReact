@@ -9,9 +9,11 @@ import axios from "axios";
 import "../styles/MapDetails.scss";
 import NavbarAccount from "../components/NavbarAccount";
 import UpgradeBar from "../components/UpgradeBar";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const MapDetails = ({ maps, createGameAction }) => {
   const [gameID, setGameID] = useState(uuidv4());
+  const [loadingOverlay, setLoadingOverlay] = useState(false);
   let { state } = useLocation();
   useEffect(() => {
     if (maps.length === 0) {
@@ -48,6 +50,7 @@ const MapDetails = ({ maps, createGameAction }) => {
       zoomLevel: map?.zoomLevel,
       exponent: map?.exponent,
     };
+    setLoadingOverlay(true);
     axios({
       method: "post",
       url: "https://mongodb-api.onrender.com/games",
@@ -55,6 +58,7 @@ const MapDetails = ({ maps, createGameAction }) => {
     })
       .then((response) => {
         createGameAction(response.data);
+        setLoadingOverlay(false);
         const start = document.getElementById("start");
         start.click();
       })
@@ -76,7 +80,7 @@ const MapDetails = ({ maps, createGameAction }) => {
               </a>
             </div>
             <div></div>
-            <NavbarAccount user={state.user} />
+            <NavbarAccount user={state?.user} />
           </header>
         </div>
         <div className="details-main">
@@ -126,6 +130,15 @@ const MapDetails = ({ maps, createGameAction }) => {
             >
               START GAME!
             </button>
+            {loadingOverlay ? (
+              <div className="loading-spinner">
+                <ClipLoader color="#a19bd9" size={75} />
+                <div>
+                  Please wait, it can take up to 30 seconds for the free tier
+                  database to unfreeze
+                </div>
+              </div>
+            ) : null}
             <Link id="start" to={`../../game/${gameID}`}></Link>
           </div>
         </div>
